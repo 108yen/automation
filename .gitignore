@@ -1,4 +1,6 @@
 project_1/*
 !project_1/project_1.srcs
+!project_1/project_1.sdk
+project_1/project_1.sdk/*
 !project_1/project_1.sdk/out_probability
 
