@@ -67,11 +67,11 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
 
     always @(posedge CLK) begin
         if(~RESET) begin
-            DEBUG <= 1'b0;
-        end else if(/*attack_success*/deviation_corrector.search/*attack_signal_generator.cond_attack*/) begin
-            DEBUG <= 1'b1;
+            DEBUG_2 <= 1'b0;
+        end else if(communication_observation.error) begin
+            DEBUG_2 <= 1'b1;
         end else begin
-            DEBUG <= 1'b0;
+            DEBUG_2 <= 1'b0;
         end
     end
     /*always @(posedge CLK) begin
@@ -349,9 +349,9 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
 //    ack_triger
     always @(posedge CLK) begin
         if(~RESET) begin
-            DEBUG_2 <= 1'b0;
+            DEBUG <= 1'b0;
         end else begin
-            DEBUG_2 <= ack_triger;
+            DEBUG <= ack_triger;
         end
     end
     
@@ -474,6 +474,7 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
         .SENDER_BIT(sender_bit),
         .RECEIVER_BIT(receiver_bit),
         .DEVIATION(deviation),
+        .ACK_TRIGER(ack_triger),
         .TO_DOMINANT(TO_DOMINANT),
         .TO_RECESSIVE(TO_RECESSIVE)
         );

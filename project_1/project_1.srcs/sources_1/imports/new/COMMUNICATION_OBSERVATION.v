@@ -68,7 +68,7 @@ module COMMUNICATION_OBSERVATION(CLK, RESET, ATTACK_STATE, CAN_SIGNAL_IN, SP_TRG
             ATTACK_SUCCESS <= 1'b0;
         end else if(attack_frame == 1'b0) begin
             ATTACK_SUCCESS <= 1'b0;
-        end else if(attack_frame && can_frame_reg == 2'b01 && !FAILURE && accept_frame) begin //attackしてerrorが出てないなら
+        end else if(attack_frame && can_frame_reg == 2'b01 && !FAILURE/* && accept_frame*/) begin //attackしてerrorが出てないなら
             ATTACK_SUCCESS <= 1'b1;
         end
     end
@@ -103,22 +103,25 @@ module COMMUNICATION_OBSERVATION(CLK, RESET, ATTACK_STATE, CAN_SIGNAL_IN, SP_TRG
     
     always @(posedge CLK) begin
         if(~RESET) begin
-            can_frame_reg <= 2'b00;
-        end else begin
-            can_frame_reg <= {can_frame_reg[0],can_frame};
+            error <= 1'b0;
+        end else if(can_frame_reg == 2'b01) begin
+            error <= 1'b0;
+        end else if(buffer == 6'b000000 && can_frame) begin  //普通にエラー
+            error <= 1'b1;
+//        end else if(can_frame_reg == 2'b01 && !accept_frame && attack_frame) begin
+//        end else if(bit_count == 8'd8 && eof_buffer != 9'b101111111) begin //ACKが出た後エラー or ACKもエラーも出ない
+        end else if(bit_count > 8'd1 && SP_TRG && ~CAN_SIGNAL_IN) begin
+            error <= 1'b1;
+        /*end else begin  //上記の以外の場合は正常
+            error <= 1'b0;*/
         end
     end
     
     always @(posedge CLK) begin
         if(~RESET) begin
-            error <= 1'b0;
-        end else if(buffer == 6'b000000 && can_frame) begin  //普通にエラー
-            error <= 1'b1;
-        end else if(can_frame_reg == 2'b01 && !accept_frame && attack_frame) begin
-//        end else if(bit_count == 8'd9 && eof_buffer != 9'b011111111) begin //ACKが出た後エラー or ACKもエラーも出ない
-            error <= 1'b1;
-        end else begin  //上記の以外の場合は正常
-            error <= 1'b0;
+            can_frame_reg <= 2'b00;
+        end else begin
+            can_frame_reg <= {can_frame_reg[0],can_frame};
         end
     end
     

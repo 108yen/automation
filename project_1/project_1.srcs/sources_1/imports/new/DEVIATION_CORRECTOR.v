@@ -34,8 +34,8 @@ module DEVIATION_CORRECTOR(CLK, RESET, ATTACK_STATE, FAILURE, ATTACK_SUCCESS, DE
     
 //    parameter TAMPER_NUM = 8'd8;
     parameter TAMPER_NUM = 8'd11;
-    parameter PATTERN = 8'd6;
-    parameter LIMIT = 16'd30;   //攻撃成功確率の下限　これを下回ると探索再開（1000波形中）
+    parameter PATTERN = 8'd8;
+    parameter LIMIT = 16'd10;   //攻撃成功確率の下限　これを下回ると探索再開（1000波形中）
     parameter EXIT_CONDITION = 8'd2;
     
     reg [7:0] array[59:0];
