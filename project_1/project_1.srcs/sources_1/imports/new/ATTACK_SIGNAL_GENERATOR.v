@@ -47,16 +47,16 @@ module ATTACK_SIGNAL_GENERATOR(CLK, RESET, DEBUG_COUNT, ATTACK_STATE, SENDER_TQ,
     output reg TO_DOMINANT;    //1から0への電位差操作
     output reg TO_RECESSIVE;    //0から1への電位差操作
     
-//    parameter UNATTACKED_MSG = 44'b00011001101000001001000001001110000101010110;    //ID:19A,DATA:1のメッセージ
-//    parameter ATTACKED_MSG =   44'b00011001101000001001000001000010010011001111;  //ID:19A,DATA:0のメッセージ
+    parameter UNATTACKED_MSG = 44'b00011001101000001001000001001110000101010110;    //ID:19A,DATA:1のメッセージ
+    parameter ATTACKED_MSG =   44'b00011001101000001001000001000010010011001111;  //ID:19A,DATA:0のメッセージ
 //    parameter UNATTACKED_MSG =  44'b00011001101000001001000001000010010011001111;   //ID:19A,DATA:0のメッセージ
 //    parameter ATTACKED_MSG =    44'b00011001101000001001000001001110000101010110;  //ID:19A,DATA:1のメッセージ
-    parameter UNATTACKED_MSG = 48'b000001111011100000101000001001101111101011000110;    //ID:077,DATA:01のメッセージ
-    parameter ATTACKED_MSG =   48'b000001111011100000101000001010101010010000011110;  //ID:077,DATA:02のメッセージ
+//    parameter UNATTACKED_MSG = 48'b000001111011100000101000001001101111101011000110;    //ID:077,DATA:01のメッセージ
+//    parameter ATTACKED_MSG =   48'b000001111011100000101000001010101010010000011110;  //ID:077,DATA:02のメッセージ
 //    parameter ATTACKED_MSG =   48'b000001111011100000101000001101000011101111101010;  //ID:077,DATA:05のメッセージ
 //    parameter UNATTACKED_MSG = 47'b00000111101110000010100000101100100010001101010;    //ID:077,DATA:03のメッセージ
 //    parameter ATTACKED_MSG =   47'b00000111101110000010100000110010000101110011110;  //ID:077,DATA:04のメッセージ
-    parameter MSG_L = 8'd48;
+    parameter MSG_L = 8'd44;
     parameter SIGNAL_L = 8'd200; //攻撃信号の長さns
     parameter SJW = 8'd2;
     parameter SENDER_SP = 8'd9;   //何TQ後か
@@ -86,8 +86,9 @@ module ATTACK_SIGNAL_GENERATOR(CLK, RESET, DEBUG_COUNT, ATTACK_STATE, SENDER_TQ,
 //    再同期用の攻撃信号    
     wire st_resyn;  //再同期の攻撃信号のスタート位置
     wire fin_resyn; //再同期の攻撃信号終了位置
-    assign st_resyn = ex_resyn && (TO_RECESSIVE && TO_DOMINANT) && ((resyn_count >= 8'd25 && resyn_count < 8'd50 && ~attack_bit) || (attacked  && resyn_count >= 8'd25 && resyn_count < 8'd50));
-    assign fin_resyn = resyn && resyn_count == 8'd50 || (cond_attack && attack_bit);
+    reg [7:0]resyn_pos = 8'd43;
+    assign st_resyn = ex_resyn && (TO_RECESSIVE && TO_DOMINANT) && ((resyn_count >= 8'd20 && resyn_count < resyn_pos && ~attack_bit) || (attacked  && resyn_count >= 8'd20 && resyn_count < resyn_pos));
+    assign fin_resyn = resyn && resyn_count == resyn_pos || (cond_attack && attack_bit);
 
     always @(posedge CLK) begin
         if(~RESET) begin
@@ -233,7 +234,7 @@ module ATTACK_SIGNAL_GENERATOR(CLK, RESET, DEBUG_COUNT, ATTACK_STATE, SENDER_TQ,
     end
     
 //    攻撃信号の生成   1→0
-    reg [7:0]adjust = 8'd4; //調整
+    reg [7:0]adjust = 8'd6; //調整
     wire [7:0]attack_length_count; //攻撃する幅のカウント
     wire [7:0]st_attack; //攻撃を開始するポイント
     wire [7:0]receiver_count;    //受信側のカウント  st_attack==receiver_coutで攻撃開始
@@ -241,7 +242,7 @@ module ATTACK_SIGNAL_GENERATOR(CLK, RESET, DEBUG_COUNT, ATTACK_STATE, SENDER_TQ,
     assign attack_length_count = SIGNAL_L / (CLK_WAVELENGTH * 8'd2);
     assign st_attack = RECEIVER_SP * (TQ_length + 8'd1) - attack_length_count;
     assign receiver_count = RECEIVER_TQ * (TQ_length + 8'd1) + R_COUNTER;
-    assign cond_attack = receiver_count == st_attack - adjust - 8'd8 + convert(array[attack_num]);
+    assign cond_attack = receiver_count == st_attack - adjust - 8'd4 + convert(array[attack_num]);
 //    assign cond_attack = $signed({1'b0,receiver_count}) == $signed({1'b0,st_attack}) + $signed(convert(array[attack_num]));
 //    assign cond_attack = receiver_count == st_attack - DEBUG_COUNT;
 
@@ -250,10 +251,10 @@ module ATTACK_SIGNAL_GENERATOR(CLK, RESET, DEBUG_COUNT, ATTACK_STATE, SENDER_TQ,
             TO_DOMINANT <= 1'b1;
         end else if(~ATTACK_STATE) begin
             TO_DOMINANT <= 1'b1;
-        end else if(ack_bit == SENDER_BIT && SENDER_TQ == 8'd15) begin
+        /*end else if(ack_bit == SENDER_BIT && SENDER_TQ == 8'd15) begin
             TO_DOMINANT <= 1'b1;
         end else if(ACK_TRIGER && ack_bit == 0 &&  SENDER_TQ == 8'd0) begin
-            TO_DOMINANT <= 1'b0;
+            TO_DOMINANT <= 1'b0;*/
         end else if(fin_attack) begin
             TO_DOMINANT <= 1'b1;
         end else if(attack_bit && UNATTACKED_MSG[MSG_L - 1 - RECEIVER_BIT] == 1'b1) begin    //今1なら0に電位差操作する必要がある
@@ -322,7 +323,7 @@ module ATTACK_SIGNAL_GENERATOR(CLK, RESET, DEBUG_COUNT, ATTACK_STATE, SENDER_TQ,
         input [7:0]n;
         
         case(n)
-            8'd0: convert = 8'd8;
+           /* 8'd0: convert = 8'd8;
             8'd1: convert = 8'd10;
             8'd2: convert = 8'd6;
             8'd3: convert = 8'd12;
@@ -330,13 +331,13 @@ module ATTACK_SIGNAL_GENERATOR(CLK, RESET, DEBUG_COUNT, ATTACK_STATE, SENDER_TQ,
             8'd5: convert = 8'd14;
             8'd6: convert = 8'd2;
             8'd7: convert = 8'd16;
-            8'd8: convert = 8'd0;
+            8'd8: convert = 8'd0;*/
             /*8'd0: convert = 8'd4;
             8'd1: convert = 8'd6;
             8'd2: convert = 8'd2;
             8'd3: convert = 8'd8;
             8'd4: convert = 8'd0;*/
-            /*8'd0: convert = 8'd4;
+            8'd0: convert = 8'd4;
             8'd1: convert = 8'd5;
             8'd2: convert = 8'd3;
             8'd3: convert = 8'd6;
@@ -344,7 +345,7 @@ module ATTACK_SIGNAL_GENERATOR(CLK, RESET, DEBUG_COUNT, ATTACK_STATE, SENDER_TQ,
             8'd5: convert = 8'd7;
             8'd6: convert = 8'd1;
             8'd7: convert = 8'd8;
-            8'd8: convert = 8'd0;*/
+            8'd8: convert = 8'd0;
         endcase
     endfunction;
     

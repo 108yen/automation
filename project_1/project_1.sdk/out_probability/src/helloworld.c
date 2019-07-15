@@ -256,10 +256,10 @@ int main(void)
 //			end = clock();
 			search_num = XGpio_DiscreteRead(&num_Gpio, SEARCH_NUM_CHANNEL);
 			printf("\narray[0] = %d, array[1] = %d, array[2] = %d, array[3] = %d, array[4] = %d, array[5] = %d, array[6] = %d, array[7] = %d\n", array[0],array[1],array[2],array[3],array[4],array[5],array[6],array[7]);
-//			printf("progress = %9d  %3.1f %% \n", search_num, ((float)search_num/9765625)*100);	//4782969
+			printf("progress = %9d  %3.1f %% \n", search_num, ((float)search_num/4782969)*100);	//9765625
 //			printf("progress = %9d  %3.1f %% \n", search_num, ((float)search_num/39062500)*100);	//1bit–Ú‚Ì‰ü‚´‚ñ‚à’Tõ
 //			printf("progress = %9d  %3.1f %% \n", search_num, ((float)search_num/282475249)*100);	//7^10
-			printf("progress = %10d  %3.1f %% \n", search_num, ((float)search_num/3486784401)*100);	//9^10
+//			printf("progress = %10d  %3.1f %% \n", search_num, ((float)search_num/3486784401)*100);	//9^10
 //			printf("time = %10d s\n", (end - st));
 			printf("\x1b[3A");
 		}

@@ -28,10 +28,10 @@ module MSG_FILTER(CLK, RESET, STATE, BUS_MSG, ATTACK_PERMIT, ATTACK_STATE, TRIGE
 	output reg ATTACK_STATE;
 	output reg TRIGER;
 	
-//	parameter TARGET = {96'b1,1'b0,11'h19a}; //id:0x19A
+	parameter TARGET = {96'b1,1'b0,11'h19a}; //id:0x19A
 //    parameter TARGET = {96'b1,1'b0,11'h1b8}; //id:0x1b8
 //    parameter TARGET = {96'b1,1'b0,12'b000011101101}; //id:0x06d id’†‚Éstaffbit‚ª‚ ‚é
-    parameter TARGET = {96'b1,1'b0,12'b000011110111}; //id:0x077	
+//    parameter TARGET = {96'b1,1'b0,12'b000011110111}; //id:0x077	
 	always @(posedge CLK) begin
 	    if(~RESET) begin
 	        ATTACK_STATE <= 1'b0;

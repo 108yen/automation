@@ -53,17 +53,17 @@ module TQ_OBSERVER(CLK, RESET, STATE, ATTACK_STATE, CAN_SIGNAL_IN, BUS_MSG, DEBU
     
     parameter CLK_WAVELENGTH = 8'd25;
     
-//    parameter UNATTACKED_MSG = 44'b00011001101000001001000001001110000101010110;    //ID:19A,DATA:1のメッセージ
-//    parameter ATTACKED_MSG =   44'b00011001101000001001000001000010010011001111;  //ID:19A,DATA:0のメッセージ
+    parameter UNATTACKED_MSG = 44'b00011001101000001001000001001110000101010110;    //ID:19A,DATA:1のメッセージ
+    parameter ATTACKED_MSG =   44'b00011001101000001001000001000010010011001111;  //ID:19A,DATA:0のメッセージ
 //    parameter UNATTACKED_MSG =  44'b00011001101000001001000001000010010011001111;   //ID:19A,DATA:0のメッセージ
 //    parameter ATTACKED_MSG =   44'b00011001101000001001000001001110000101010110;  //ID:19A,DATA:1のメッセージ
-    parameter UNATTACKED_MSG = 48'b000001111011100000101000001001101111101011000110;    //ID:077,DATA:01のメッセージ
-    parameter ATTACKED_MSG =   48'b000001111011100000101000001010101010010000011110;  //ID:077,DATA:02のメッセージ
+//    parameter UNATTACKED_MSG = 48'b000001111011100000101000001001101111101011000110;    //ID:077,DATA:01のメッセージ
+//    parameter ATTACKED_MSG =   48'b000001111011100000101000001010101010010000011110;  //ID:077,DATA:02のメッセージ
 //    parameter ATTACKED_MSG =   48'b000001111011100000101000001101000011101111101010;  //ID:077,DATA:05のメッセージ
 //    parameter UNATTACKED_MSG = 47'b00000111101110000010100000101100100010001101010;    //ID:077,DATA:03のメッセージ
 //    parameter ATTACKED_MSG =   47'b00000111101110000010100000110010000101110011110;  //ID:077,DATA:04のメッセージ
-    parameter MSG_L = 8'd48;
-    parameter SJW = 8'd3;
+    parameter MSG_L = 8'd44;
+    parameter SJW = 8'd2;
     parameter SENDER_SP = 8'd9;   //何TQ後か
     parameter SENDER_PTS = 8'd4;
     parameter SENDER_PS1 = 8'd4;
@@ -215,11 +215,13 @@ module TQ_OBSERVER(CLK, RESET, STATE, ATTACK_STATE, CAN_SIGNAL_IN, BUS_MSG, DEBU
 
 //    TQの処理
     wire s_resyn_ps2;
+    wire s_resyn_pts;
     assign s_timing1 = 8'd1 + SENDER_PTS + SENDER_PS1 - 8'd1;
 //    assign s_timing1 = 8'd1 + SENDER_PTS + SENDER_PS1;
     assign s_timing2 = 8'd1 + SENDER_PTS + SENDER_PS1 + SENDER_PS2 - 8'd1;
 //    assign s_resyn_ps2 = syn == 2'b10 && ATTACK_STATE && (SENDER_TQ >= s_timing1 && SENDER_TQ <= s_timing2  && UNATTACKED_MSG[MSG_L - 8'd1 - SENDER_BIT] == 1'b1);
     assign s_resyn_ps2 = syn == 2'b10 && ATTACK_STATE && (SENDER_TQ >= s_timing1/* + 8'd1 */&& SENDER_TQ < s_timing2  && UNATTACKED_MSG[MSG_L - 8'd1 - SENDER_BIT] == 1'b1);
+    assign s_resyn_pts = syn == 2'b10 && ATTACK_STATE && (SENDER_TQ >= 8'd1 && SENDER_TQ <= s_timing1  && UNATTACKED_MSG[MSG_L - 8'd1 - SENDER_BIT] == 1'b1);
 
     always @(posedge CLK) begin //送信ECUのTQ
         if(~RESET) begin
@@ -232,7 +234,13 @@ module TQ_OBSERVER(CLK, RESET, STATE, ATTACK_STATE, CAN_SIGNAL_IN, BUS_MSG, DEBU
             end else begin  //SJWの範囲外ならSJWの分だけ再同期
                 SENDER_TQ <= SENDER_TQ + SJW;
             end
-        end else begin //入れ替え
+        end else if(s_resyn_pts) begin//攻撃時 10のエッジがPTS内なら
+            if(SJW - 1 >= SENDER_TQ) begin            
+                SENDER_TQ <= 1'd0;
+            end else begin  //SJWの範囲外ならSJWの分だけ再同期
+                SENDER_TQ <= SENDER_TQ - (SJW - 8'd1);
+            end
+        end else begin //インクリメント
             if(S_COUNTER == TQ_length && SENDER_TQ == 8'd15) begin
                 SENDER_TQ <= 8'b0;
             end else if(S_COUNTER == TQ_length) begin
@@ -265,7 +273,6 @@ module TQ_OBSERVER(CLK, RESET, STATE, ATTACK_STATE, CAN_SIGNAL_IN, BUS_MSG, DEBU
                 RECEIVER_TQ <= RECEIVER_TQ + SJW;
             end
         end else if(r_resyn_pts) begin//攻撃時 10のエッジがPTS内なら
-//            if($signed({1'b0,(SJW - 8'd1)}) - $signed({1'b0,RECEIVER_TQ}) >= $signed(9'd0)) begin //SJWの範囲内なら
             if(SJW - 1 >= RECEIVER_TQ) begin            
                 RECEIVER_TQ <= 1'd0;
             end else begin  //SJWの範囲外ならSJWの分だけ再同期

@@ -33,7 +33,7 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
     output [31:0]SUCCESS_RATE;
     output [31:0]SEARCH_NUM;
     output [31:0]ARRAY;
-    output reg DEBUG;
+    output DEBUG;
     output reg DEBUG_1;
     output reg DEBUG_2;
     
@@ -63,8 +63,9 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
 //    assign ARRAY = {deviation[451:448], deviation[443:440], deviation[435:432], deviation[427:424], deviation[419:416], deviation[411:408], deviation[403:400], deviation[395:392]};
     assign ARRAY = {deviation[475:472], deviation[467:464], deviation[459:456], deviation[451:448], deviation[443:440], deviation[435:432], deviation[427:424], deviation[419:416]};
 //    resyn
-//    assign DEBUG = attack_signal_generator.resyn;
-
+//    assign DEBUG = attack_signal_generator.resyn_bit;
+    assign DEBUG = communication_observation.accept_frame;
+/*
     always @(posedge CLK) begin
         if(~RESET) begin
             DEBUG_2 <= 1'b0;
@@ -74,7 +75,8 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
             DEBUG_2 <= 1'b0;
         end
     end
-    /*always @(posedge CLK) begin
+
+    always @(posedge CLK) begin
         if(~RESET) begin
             DEBUG <= 1'b0;
         end else if(communication_observation.buffer == 6'b000000) begin
@@ -82,9 +84,9 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
         end else begin
             DEBUG <= 1'b0;
         end
-    end*/
+    end
     
-    /*always @(posedge CLK) begin
+    always @(posedge CLK) begin
         if(~RESET) begin
             DEBUG_1 <= 1'b0;
         end else if(failure) begin
@@ -92,19 +94,19 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
         end else begin
             DEBUG_1 <= 1'b0;
         end
-    end*/
-    /*always @(posedge CLK) begin
+    end
+    always @(posedge CLK) begin
         if(~RESET) begin
             DEBUG_2 <= 1'b0;
         end else if(((receiver_bit == 8'd44 - 8'd1 || receiver_bit ==8'd41 - 8'd1)
-         && receiver_TQ * *//*(TQ_length + 8'd1)*//*8'd5 + r_counter== *//*RECEIVER_SP*//*8'd10 * *//*(TQ_length + 8'd1)*//*8'd5 - *//*SIGNAL_L / (CLK_WAVELENGTH * 8'd2)*//*8'd4 - 8'd5)) begin
+         && receiver_TQ * (TQ_length + 8'd1)8'd5 + r_counter== RECEIVER_SP8'd10 * (TQ_length + 8'd1)8'd5 - SIGNAL_L / (CLK_WAVELENGTH * 8'd2)8'd4 - 8'd5)) begin
             DEBUG_2 <= 1'b1;
         end else begin
             DEBUG_2 <= 1'b0;
         end
-    end*/
+    end
 //    r_bit_inc
-    /*always @(posedge CLK) begin
+    always @(posedge CLK) begin
         if(~RESET) begin
             DEBUG_1 <= 1'b0;
         end else if (bit_count.r_bit_inc == 1'b1) begin
@@ -112,7 +114,8 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
         end else begin
             DEBUG_1 <= 1'b0;
         end
-    end*/
+    end
+*/
 //    ECUの1ビットをみたい
     always @(posedge CLK) begin
         if(~RESET) begin
@@ -131,7 +134,8 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
             DEBUG_1 <= ~DEBUG_1;
         end
     end
-    /*always @(posedge CLK) begin
+/*
+    always @(posedge CLK) begin
         if(~RESET) begin
             DEBUG <= 1'b0;
         end else if(state == 1'b0) begin
@@ -141,9 +145,9 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
         end else begin
             DEBUG <= 1'b0;
         end
-    end*/
-    
-    /*always @(posedge CLK) begin
+    end
+*/
+    always @(posedge CLK) begin
         if(~RESET) begin
             pre_sender_bit <= 8'b0;
         end else begin
@@ -153,15 +157,16 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
     
     always @(posedge CLK) begin
         if(~RESET) begin
-            DEBUG_1 <= 1'b0;
+            DEBUG_2 <= 1'b0;
         end else if(state == 1'b0) begin
-            DEBUG_1 <= 1'b0;
+            DEBUG_2 <= 1'b0;
         end else if (pre_sender_bit != sender_bit) begin
-            DEBUG_1 <= ~DEBUG_1;
+            DEBUG_2 <= ~DEBUG_2;
         end
-    end*/
+    end
+    /*
 //    receiver_tq ==0 
-    /*always @(posedge CLK) begin
+    always @(posedge CLK) begin
         if(~RESET) begin
             DEBUG_2 <= 1'b0;
         end else if(receiver_TQ == 8'd1) begin
@@ -169,9 +174,9 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
         end else begin
             DEBUG_2 <= 1'b0;
         end
-    end*/
+    end
     
-    /*always @(posedge CLK) begin
+    always @(posedge CLK) begin
         if(~RESET) begin
             DEBUG <= 1'b0;
         end else if(receiver_TQ == DEBUG_COUNT) begin
@@ -179,9 +184,9 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
         end else begin
             DEBUG <= 1'b0;
         end
-    end*/
+    end
 //    receiver_TQ
-    /*always @(posedge CLK) begin
+    always @(posedge CLK) begin
         if(~RESET) begin
             pre_receiver_TQ <= 8'b0;
         end else begin
@@ -197,9 +202,9 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
         end else if (pre_receiver_TQ != receiver_TQ) begin
             DEBUG_2 <= ~DEBUG_2;
         end
-    end*/
+    end
 //    sender_TQ
-    /*always @(posedge CLK) begin
+    always @(posedge CLK) begin
         if(~RESET) begin
             pre_sender_TQ <= 8'b0;
         end else begin
@@ -215,10 +220,10 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
         end else if (pre_sender_TQ != sender_TQ) begin
             DEBUG <= ~DEBUG;
         end
-    end*/
+    end
     
 //    r_counter
-    /*always @(posedge CLK) begin
+    always @(posedge CLK) begin
         if(~RESET) begin
             pre_r_counter <= 8'b0;
         end else begin
@@ -231,8 +236,8 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
         end else if(pre_r_counter != r_counter) begin
             DEBUG <= ~DEBUG;
         end
-    end */
-    /*always @(posedge CLK) begin
+    end 
+    always @(posedge CLK) begin
         if(~RESET) begin
             DEBUG <= 1'b0;
         end else if(r_counter == 8'd0) begin
@@ -240,8 +245,8 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
         end else begin
             DEBUG <= 1'b0;
         end
-    end*/    
-    /*always @(posedge CLK) begin
+    end    
+    always @(posedge CLK) begin
         if(~RESET) begin
             DEBUG_2 <= 1'b0;
         end else if(sender_bit == 8'b0) begin
@@ -249,25 +254,25 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
         end else begin
             DEBUG_2 <= 1'b0;
         end
-    end*/
+    end
 //    波形の観察
-    /*always @(posedge CLK) begin
+    always @(posedge CLK) begin
         if(~RESET) begin
             DEBUG <= 1'b0;
         end else begin
             DEBUG <= attack_signal_generator.UNATTACKED_MSG[attack_signal_generator.MSG_L - 1 - sender_bit];
         end
-    end*/
-    /*always @(posedge CLK) begin
+    end
+    always @(posedge CLK) begin
         if(~RESET) begin
             DEBUG_1 <= 1'b0;
         end else begin
             DEBUG_1 <= attack_signal_generator.ATTACKED_MSG[attack_signal_generator.MSG_L - 1 - receiver_bit];
         end
-    end*/
+    end
     
 //    attackbit
-    /*always @(posedge CLK) begin
+    always @(posedge CLK) begin
         if(~RESET) begin
             DEBUG_1 <= 1'b0;
         end else if(attack_signal_generator.attack_bit == 1'b1) begin
@@ -275,20 +280,20 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
         end else begin
             DEBUG_1 <= 1'b0;
         end
-    end*/
+    end
 //    counter
-    /*always @(posedge CLK) begin
+    always @(posedge CLK) begin
         if(~RESET) begin
             DEBUG_1 <= 1'b1;
-        end else if(attack_signal_generator.counter == 8'b0*//*attack_signal_generator.SIGNAL_L / attack_signal_generator.CLK_WAVELENGTH*//*) begin
+        end else if(attack_signal_generator.counter == 8'b0attack_signal_generator.SIGNAL_L / attack_signal_generator.CLK_WAVELENGTH) begin
             DEBUG_1 <= 1'b0;
         end else begin
             DEBUG_1 <= 1'b1;
         end
-    end*/
+    end
 
 //    サンプルポイントの位置を見たい
-    /*always @(posedge CLK) begin
+    always @(posedge CLK) begin
         if(~RESET) begin
             DEBUG_1 <= 1'b0;
         end else if(r_counter == 8'd0) begin
@@ -296,9 +301,9 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
         end else if(receiver_TQ == attack_signal_generator.RECEIVER_SP-8'b1 && r_counter == 8'd3) begin
             DEBUG_1 <= 1'b1;
         end
-    end*/
+    end
     
-    /*always @(posedge CLK) begin
+    always @(posedge CLK) begin
         if(~RESET) begin
             DEBUG_1 <= 1'b0;
         end else if(s_counter == 8'd0) begin
@@ -306,10 +311,10 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
         end else if(sender_TQ == attack_signal_generator.SENDER_SP-8'b1 && s_counter == 8'd3) begin
             DEBUG_1 <= 1'b1;
         end
-    end*/
+    end
     
 //    s_edge_countを見る
-    /*always @(posedge CLK) begin
+    always @(posedge CLK) begin
         if(~RESET) begin
             DEBUG <= 1'b1;
         end else if(tq_observer.s_edge_count == 8'b0) begin
@@ -317,9 +322,9 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
         end else begin
             DEBUG <= 1'b1;
         end
-    end*/
+    end
 //    sender_TQが0
-    /*always @(posedge CLK) begin
+    always @(posedge CLK) begin
         if(~RESET) begin
             DEBUG_1 <= 1'b1;
         end else if(sender_TQ == 8'b0) begin
@@ -327,9 +332,9 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
         end else begin
             DEBUG_1 <= 1'b1;
         end
-    end*/
+    end
 //    10のエッジを見る
-    /*always @(posedge CLK) begin
+    always @(posedge CLK) begin
         if(~RESET) begin
             DEBUG <= 1'b1;
         end else if(tq_observer.syn == 2'b10) begin
@@ -337,15 +342,16 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
         end else begin
             DEBUG <= 1'b1;
         end
-    end*/
+    end
 //    attackstateを見る
-    /*always @(posedge CLK) begin
+    always @(posedge CLK) begin
         if(~RESET) begin
             DEBUG_1 <= 1'b1;
         end else begin
             DEBUG_1 <= state;
         end
-    end*/
+    end
+
 //    ack_triger
     always @(posedge CLK) begin
         if(~RESET) begin
@@ -354,9 +360,9 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
             DEBUG <= ack_triger;
         end
     end
-    
+
 //    CLK
-    /*always @(posedge CLK) begin
+    always @(posedge CLK) begin
         if(~RESET) begin
             DEBUG <= 1'b0;
         end else if(~state) begin
@@ -364,52 +370,54 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
         end else begin
             DEBUG <= ~DEBUG;
         end
-    end*/
+    end
 //    reverse_TQ
-    /*always @(posedge CLK) begin
+    always @(posedge CLK) begin
         if(~RESET) begin
             DEBUG <= 1'b0;
         end else begin
             DEBUG <= tq_observer.reverse_TQ;
         end    
-    end */
+    end 
 //    reverse_counter
-    /*always @(posedge CLK) begin
+    always @(posedge CLK) begin
         if(~RESET) begin
             DEBUG_2 <= 1'b0;
         end else begin
             DEBUG_2 <= tq_observer.reverse_counter;
         end    
-    end */
+    end 
 //    state
-   /*always @(posedge CLK) begin
+   always @(posedge CLK) begin
         if(~RESET) begin
             DEBUG_2 <= 1'b0;
         end else begin
             DEBUG_2 <= state;
         end
-    end*/
+    end
+    
 //    bit_count
-    /*always @(posedge CLK) begin
+    always @(posedge CLK) begin
         if(~RESET) begin
-            DEBUG_2 <= 1'b0;
+            DEBUG <= 1'b0;
         end else if(state == 1'b0) begin
-            DEBUG_2 <= 1'b0;
+            DEBUG <= 1'b0;
         end else if(bit_count.count == 8'd0) begin
-            DEBUG_2 <= 1'b0;
+            DEBUG <= 1'b0;
         end else begin
-            DEBUG_2 <= 1'b1;
+            DEBUG <= 1'b1;
         end
-    end*/
+    end
     
 //    tq_observerのr_resyn_pts
-    /*always @(posedge CLK) begin
+    always @(posedge CLK) begin
         if(~RESET) begin
             DEBUG_1 <= 1'b0;
         end else begin
             DEBUG_1 <= tq_observer.r_resyn_ps2;
         end
-    end*/
+    end
+*/
     
     TQ_OBSERVER tq_observer(
         .CLK(CLK),
