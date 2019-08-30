@@ -63,8 +63,8 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
 //    assign ARRAY = {deviation[451:448], deviation[443:440], deviation[435:432], deviation[427:424], deviation[419:416], deviation[411:408], deviation[403:400], deviation[395:392]};
     assign ARRAY = {deviation[475:472], deviation[467:464], deviation[459:456], deviation[451:448], deviation[443:440], deviation[435:432], deviation[427:424], deviation[419:416]};
 //    resyn
-//    assign DEBUG = attack_signal_generator.resyn_bit;
-    assign DEBUG = communication_observation.accept_frame;
+    assign DEBUG = attack_signal_generator.resyn_bit;
+//    assign DEBUG = communication_observation.accept_frame;
 /*
     always @(posedge CLK) begin
         if(~RESET) begin

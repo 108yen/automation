@@ -45,6 +45,7 @@ module DEVIATION_CORRECTOR(CLK, RESET, ATTACK_STATE, FAILURE, ATTACK_SUCCESS, DE
     reg [7:0]num;
     reg [15:0]success_rate_reg;
     reg [15:0]count;
+    reg [7:0]continuous; //ìØÇ∂ÉpÉ^Å[ÉìÇ≈âΩâÒçUåÇÇµÇΩÇ©
     integer i;
 //    genvar j;
 
@@ -78,9 +79,15 @@ module DEVIATION_CORRECTOR(CLK, RESET, ATTACK_STATE, FAILURE, ATTACK_SUCCESS, DE
                 array[i] <= 8'b0;
             end
             SEARCH_NUM <= 0;
+            continuous <= 0;
         end else if(failure_reg == 2'b10 && search) begin  //íTçı   â¸Ç¥ÇÒñà
-            inc_array(8'b0);
-            SEARCH_NUM <= SEARCH_NUM + 1;
+            if(continuous == 8'd10) begin
+                inc_array(8'b0);
+                SEARCH_NUM <= SEARCH_NUM + 1;
+                continuous <= 0;
+            end else begin
+                continuous <= continuous + 1;
+            end
         end
     end
     

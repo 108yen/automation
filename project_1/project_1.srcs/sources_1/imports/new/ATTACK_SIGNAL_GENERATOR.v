@@ -81,8 +81,8 @@ module ATTACK_SIGNAL_GENERATOR(CLK, RESET, DEBUG_COUNT, ATTACK_STATE, SENDER_TQ,
     wire [7:0] array [59:0];
     wire [7:0]attack_num;
     
-    assign TQ_length = 8'd125 / CLK_WAVELENGTH - 8'd1;  //40MHzだと4
-      
+    assign TQ_length = 8'd125 / CLK_WAVELENGTH - 8'd1;  //40MHzだと4    
+          
 //    再同期用の攻撃信号    
     wire st_resyn;  //再同期の攻撃信号のスタート位置
     wire fin_resyn; //再同期の攻撃信号終了位置
@@ -257,10 +257,25 @@ module ATTACK_SIGNAL_GENERATOR(CLK, RESET, DEBUG_COUNT, ATTACK_STATE, SENDER_TQ,
             TO_DOMINANT <= 1'b0;*/
         end else if(fin_attack) begin
             TO_DOMINANT <= 1'b1;
-        end else if(attack_bit && UNATTACKED_MSG[MSG_L - 1 - RECEIVER_BIT] == 1'b1) begin    //今1なら0に電位差操作する必要がある
-            if(cond_attack) begin//攻撃開始 遅延ぶんも引く
-                TO_DOMINANT <= 1'b0;
-            end
+        end else if(cond_attack && attack_bit && UNATTACKED_MSG[MSG_L - 1 - RECEIVER_BIT] == 1'b1) begin    //今1なら0に電位差操作する必要がある
+            TO_DOMINANT <= 1'b0;
+        end
+    end
+
+//    0→1
+    always @(posedge CLK) begin
+        if(~RESET) begin
+            TO_RECESSIVE <= 1'b1;
+        end else if(~ATTACK_STATE) begin
+            TO_RECESSIVE <= 1'b1;
+        end else if(fin_attack) begin
+            TO_RECESSIVE <= 1'b1;
+        end else if(cond_attack && attack_bit && UNATTACKED_MSG[MSG_L - 1 - RECEIVER_BIT] == 1'b0) begin    //今0なら1に電位差操作する必要がある
+            TO_RECESSIVE <= 1'b0;
+        end else if(resyn_edge == 2'b10) begin
+            TO_RECESSIVE <= 1'b1;
+        end else if(resyn_edge == 2'b01) begin
+            TO_RECESSIVE <= 1'b0;
         end
     end
     
@@ -272,27 +287,6 @@ module ATTACK_SIGNAL_GENERATOR(CLK, RESET, DEBUG_COUNT, ATTACK_STATE, SENDER_TQ,
             ack_bit <= 0;
         end else if(ACK_TRIGER && SENDER_TQ == 8'd0) begin
             ack_bit <= SENDER_BIT;
-        end
-    end
-    
-    
-//    0→1
-
-    always @(posedge CLK) begin
-        if(~RESET) begin
-            TO_RECESSIVE <= 1'b1;
-        end else if(~ATTACK_STATE) begin
-            TO_RECESSIVE <= 1'b1;
-        end else if(fin_attack) begin
-            TO_RECESSIVE <= 1'b1;
-        end else if(attack_bit && UNATTACKED_MSG[MSG_L - 1 - RECEIVER_BIT] == 1'b0) begin    //今0なら1に電位差操作する必要がある
-           if(cond_attack) begin//攻撃開始
-                TO_RECESSIVE <= 1'b0;
-            end
-        end else if(resyn_edge == 2'b10) begin
-            TO_RECESSIVE <= 1'b1;
-        end else if(resyn_edge == 2'b01) begin
-            TO_RECESSIVE <= 1'b0;
         end
     end
     

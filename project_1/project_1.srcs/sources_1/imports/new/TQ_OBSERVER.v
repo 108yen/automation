@@ -173,6 +173,8 @@ module TQ_OBSERVER(CLK, RESET, STATE, ATTACK_STATE, CAN_SIGNAL_IN, BUS_MSG, DEBU
             S_COUNTER <= 8'b0;
         end else if(syn == 2'b10 && STATE && ~ACK_TRIGER && ~ATTACK_STATE) begin    //攻撃時じゃないときACK以外の10エッジで同期
             S_COUNTER <= 8'd3;
+        end else if(r_resyn_pts) begin
+            S_COUNTER <= 8'd2;
         end else if(s_resyn_ps2) begin
             S_COUNTER <= 8'd2;
 //            S_COUNTER <= 8'd1;
@@ -217,9 +219,7 @@ module TQ_OBSERVER(CLK, RESET, STATE, ATTACK_STATE, CAN_SIGNAL_IN, BUS_MSG, DEBU
     wire s_resyn_ps2;
     wire s_resyn_pts;
     assign s_timing1 = 8'd1 + SENDER_PTS + SENDER_PS1 - 8'd1;
-//    assign s_timing1 = 8'd1 + SENDER_PTS + SENDER_PS1;
     assign s_timing2 = 8'd1 + SENDER_PTS + SENDER_PS1 + SENDER_PS2 - 8'd1;
-//    assign s_resyn_ps2 = syn == 2'b10 && ATTACK_STATE && (SENDER_TQ >= s_timing1 && SENDER_TQ <= s_timing2  && UNATTACKED_MSG[MSG_L - 8'd1 - SENDER_BIT] == 1'b1);
     assign s_resyn_ps2 = syn == 2'b10 && ATTACK_STATE && (SENDER_TQ >= s_timing1/* + 8'd1 */&& SENDER_TQ < s_timing2  && UNATTACKED_MSG[MSG_L - 8'd1 - SENDER_BIT] == 1'b1);
     assign s_resyn_pts = syn == 2'b10 && ATTACK_STATE && (SENDER_TQ >= 8'd1 && SENDER_TQ <= s_timing1  && UNATTACKED_MSG[MSG_L - 8'd1 - SENDER_BIT] == 1'b1);
 
@@ -235,7 +235,7 @@ module TQ_OBSERVER(CLK, RESET, STATE, ATTACK_STATE, CAN_SIGNAL_IN, BUS_MSG, DEBU
                 SENDER_TQ <= SENDER_TQ + SJW;
             end
         end else if(s_resyn_pts) begin//攻撃時 10のエッジがPTS内なら
-            if(SJW - 1 >= SENDER_TQ) begin            
+            if(SJW - 1 >= SENDER_TQ) begin
                 SENDER_TQ <= 1'd0;
             end else begin  //SJWの範囲外ならSJWの分だけ再同期
                 SENDER_TQ <= SENDER_TQ - (SJW - 8'd1);
@@ -255,11 +255,8 @@ module TQ_OBSERVER(CLK, RESET, STATE, ATTACK_STATE, CAN_SIGNAL_IN, BUS_MSG, DEBU
     assign r_timing1 = 8'd1 + RECEIVER_PTS + RECEIVER_PS1 - 8'd1;   //9
 //    assign r_timing1 = 8'd1 + RECEIVER_PTS + RECEIVER_PS1;   //10
     assign r_timing2 = 8'd1 + RECEIVER_PTS + RECEIVER_PS1 + RECEIVER_PS2 - 8'd1;    //15
-//    assign r_resyn_ps2 = syn == 2'b10 && ATTACK_STATE && (RECEIVER_TQ >= r_timing1 && RECEIVER_TQ <= r_timing2 && ATTACKED_MSG[MSG_L - 8'd1 - RECEIVER_BIT] == 1'b1);
     assign r_resyn_ps2 = syn == 2'b10 && ATTACK_STATE && (RECEIVER_TQ > r_timing1/* + 8'd1 */&& RECEIVER_TQ < r_timing2 && ATTACKED_MSG[MSG_L - 8'd1 - RECEIVER_BIT] == 1'b1);
     assign r_resyn_pts = syn == 2'b10 && ATTACK_STATE && (RECEIVER_TQ >= 8'd1 && RECEIVER_TQ <= r_timing1);
-//    assign r_resyn_pts = syn == 2'b10 && ATTACK_STATE && (RECEIVER_TQ >= 8'd1 && RECEIVER_TQ <= r_timing1 - 8'b1) && ATTACKED_MSG[MSG_L - 8'd1 - RECEIVER_BIT] == 1'b0 && ATTACKED_MSG[MSG_L - 8'd0 - RECEIVER_BIT] == 1'b1;
-//    assign r_resyn_pts = syn == 2'b10 && ATTACK_STATE && (RECEIVER_TQ >= 8'd1 && RECEIVER_TQ <= r_timing1 - RECEIVER_PTS - 8'b1) && ATTACKED_MSG[MSG_L - 8'd1 - RECEIVER_BIT] == 1'b0 && ATTACKED_MSG[MSG_L - 8'd0 - RECEIVER_BIT] == 1'b1;
     
     always @(posedge CLK) begin //受信ECUのTQ
         if(~RESET) begin
