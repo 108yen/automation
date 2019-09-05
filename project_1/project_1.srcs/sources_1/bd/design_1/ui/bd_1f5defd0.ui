@@ -32,8 +32,8 @@ preplace netloc MODULE_CONTROLLER_0_DEBUG 1 5 1 NJ
 preplace netloc microblaze_0_Clk 1 1 4 160 1030 600 1060 1100 500 1460
 preplace netloc microblaze_0_axi_periph_M03_AXI 1 4 1 1430
 preplace netloc microblaze_0_axi_periph_M00_AXI 1 4 1 1450
-preplace netloc microblaze_0_M_AXI_DP 1 3 1 1090
 preplace netloc microblaze_0_ilmb_1 1 3 1 N
+preplace netloc microblaze_0_M_AXI_DP 1 3 1 1090
 preplace netloc switch_0_1 1 0 5 -40J 880 NJ 880 560J 1070 NJ 1070 1450J
 preplace netloc sys_clock_1 1 0 1 NJ
 preplace netloc can_signal_in_1 1 0 5 -50J 860 NJ 860 NJ 860 1110J 880 1420J
