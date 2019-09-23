@@ -1,6 +1,12 @@
 project_1/*
 !project_1/project_1.srcs
 !project_1/project_1.sdk
+!project_1/project_1.runs
 project_1/project_1.sdk/*
+project_1/project_1.runs/*
 !project_1/project_1.sdk/out_probability
-
+!project_1/project_1.sdk/out_prob
+!project_1/project_1.runs/impl_1
+project_1/project_1.runs/impl_1/*
+!project_1/project_1.runs/impl_1/design_1_wrapper.bit
+!project_1/project_1.runs/impl_1/design_1_wrapper.bin
