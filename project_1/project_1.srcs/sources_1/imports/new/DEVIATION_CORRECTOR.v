@@ -81,7 +81,7 @@ module DEVIATION_CORRECTOR(CLK, RESET, ATTACK_STATE, FAILURE, ATTACK_SUCCESS, DE
             SEARCH_NUM <= 0;
             continuous <= 0;
         end else if(failure_reg == 2'b10 && search) begin  //’Tõ   ‰ü‚´‚ñ–ˆ
-            if(continuous == 8'd10) begin
+            if(continuous == 8'd100) begin
                 inc_array(8'b0);
                 SEARCH_NUM <= SEARCH_NUM + 1;
                 continuous <= 0;

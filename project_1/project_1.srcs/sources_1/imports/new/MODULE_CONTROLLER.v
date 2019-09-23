@@ -52,6 +52,8 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
     wire attack_success;
     wire [479:0]deviation;
     wire [2:0]out_state;
+    wire _attack_permit = 1; //常時攻撃
+//    wire _attack_permit = ATTACK_PERMIT; //スイッチで切り替え
     
     reg [7:0]pre_sender_bit;
     reg [7:0]pre_receiver_bit;
@@ -59,7 +61,7 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
     reg [7:0]pre_receiver_TQ;
     reg [7:0]pre_r_counter;
     
-    assign OPERATING_STATE = {4'b0, ATTACK_PERMIT, out_state};
+    assign OPERATING_STATE = {4'b0, _attack_permit, out_state};
 //    assign ARRAY = {deviation[451:448], deviation[443:440], deviation[435:432], deviation[427:424], deviation[419:416], deviation[411:408], deviation[403:400], deviation[395:392]};
     assign ARRAY = {deviation[475:472], deviation[467:464], deviation[459:456], deviation[451:448], deviation[443:440], deviation[435:432], deviation[427:424], deviation[419:416]};
 //    resyn
@@ -466,7 +468,7 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
         .RESET(RESET),
         .STATE(state),
         .BUS_MSG(bus_msg),
-        .ATTACK_PERMIT(ATTACK_PERMIT),
+        .ATTACK_PERMIT(_attack_permit),
         .ATTACK_STATE(attack_state),
         .TRIGER(TRIGER)
         );
