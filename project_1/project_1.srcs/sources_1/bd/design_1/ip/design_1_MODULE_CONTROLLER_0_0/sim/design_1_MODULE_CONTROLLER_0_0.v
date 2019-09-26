@@ -58,6 +58,7 @@ module design_1_MODULE_CONTROLLER_0_0 (
   CLK,
   RESET,
   ATTACK_PERMIT,
+  BTN_0,
   DEBUG_COUNT,
   CAN_SIGNAL_IN,
   TO_DOMINANT,
@@ -79,6 +80,7 @@ input wire CLK;
 (* X_INTERFACE_INFO = "xilinx.com:signal:reset:1.0 RESET RST" *)
 input wire RESET;
 input wire ATTACK_PERMIT;
+input wire BTN_0;
 input wire [7 : 0] DEBUG_COUNT;
 input wire CAN_SIGNAL_IN;
 inout wire TO_DOMINANT;
@@ -96,6 +98,7 @@ output wire DEBUG_2;
     .CLK(CLK),
     .RESET(RESET),
     .ATTACK_PERMIT(ATTACK_PERMIT),
+    .BTN_0(BTN_0),
     .DEBUG_COUNT(DEBUG_COUNT),
     .CAN_SIGNAL_IN(CAN_SIGNAL_IN),
     .TO_DOMINANT(TO_DOMINANT),

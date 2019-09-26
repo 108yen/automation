@@ -1,7 +1,7 @@
 //Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2018.3 (win64) Build 2405991 Thu Dec  6 23:38:27 MST 2018
-//Date        : Tue Sep 24 03:42:56 2019
+//Date        : Thu Sep 26 17:41:10 2019
 //Host        : DESKTOP-NTANC38 running 64-bit major release  (build 9200)
 //Command     : generate_target design_1_wrapper.bd
 //Design      : design_1_wrapper
@@ -10,11 +10,11 @@
 `timescale 1 ps / 1 ps
 
 module design_1_wrapper
-   (can_signal_in,
+   (BTN_0,
+    can_signal_in,
     debug,
     debug_1,
     debug_2,
-    push_buttons_4bits_tri_i,
     reset,
     rgb_led_tri_io,
     switch_0,
@@ -24,11 +24,11 @@ module design_1_wrapper
     triger,
     usb_uart_rxd,
     usb_uart_txd);
+  input BTN_0;
   input can_signal_in;
   output debug;
   output debug_1;
   output debug_2;
-  input [3:0]push_buttons_4bits_tri_i;
   input reset;
   inout [11:0]rgb_led_tri_io;
   input switch_0;
@@ -39,11 +39,11 @@ module design_1_wrapper
   input usb_uart_rxd;
   output usb_uart_txd;
 
+  wire BTN_0;
   wire can_signal_in;
   wire debug;
   wire debug_1;
   wire debug_2;
-  wire [3:0]push_buttons_4bits_tri_i;
   wire reset;
   wire [0:0]rgb_led_tri_i_0;
   wire [1:1]rgb_led_tri_i_1;
@@ -102,11 +102,11 @@ module design_1_wrapper
   wire usb_uart_txd;
 
   design_1 design_1_i
-       (.can_signal_in(can_signal_in),
+       (.BTN_0(BTN_0),
+        .can_signal_in(can_signal_in),
         .debug(debug),
         .debug_1(debug_1),
         .debug_2(debug_2),
-        .push_buttons_4bits_tri_i(push_buttons_4bits_tri_i),
         .reset(reset),
         .rgb_led_tri_i({rgb_led_tri_i_11,rgb_led_tri_i_10,rgb_led_tri_i_9,rgb_led_tri_i_8,rgb_led_tri_i_7,rgb_led_tri_i_6,rgb_led_tri_i_5,rgb_led_tri_i_4,rgb_led_tri_i_3,rgb_led_tri_i_2,rgb_led_tri_i_1,rgb_led_tri_i_0}),
         .rgb_led_tri_o({rgb_led_tri_o_11,rgb_led_tri_o_10,rgb_led_tri_o_9,rgb_led_tri_o_8,rgb_led_tri_o_7,rgb_led_tri_o_6,rgb_led_tri_o_5,rgb_led_tri_o_4,rgb_led_tri_o_3,rgb_led_tri_o_2,rgb_led_tri_o_1,rgb_led_tri_o_0}),

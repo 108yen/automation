@@ -20,10 +20,11 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, TO_DOMINANT, TO_RECESSIVE, TRIGER, OPERATING_STATE, SUCCESS_RATE, SEARCH_NUM, ARRAY, DEBUG, DEBUG_1, DEBUG_2);
+module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, BTN_0, DEBUG_COUNT, CAN_SIGNAL_IN, TO_DOMINANT, TO_RECESSIVE, TRIGER, OPERATING_STATE, SUCCESS_RATE, SEARCH_NUM, ARRAY, DEBUG, DEBUG_1, DEBUG_2);
     input CLK; //40MHz 25ns 1TQ=125ns=5ÉNÉçÉbÉN
     input RESET;
     input ATTACK_PERMIT;
+    input BTN_0;
     input [7:0]DEBUG_COUNT;
     input CAN_SIGNAL_IN;
     inout TO_DOMINANT;
@@ -510,6 +511,7 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
     DEVIATION_CORRECTOR deviation_corrector(
         .CLK(CLK), 
         .RESET(RESET),
+        .BTN_0(BTN_0),
         .ATTACK_STATE(attack_state), 
         .FAILURE(failure), 
         .ATTACK_SUCCESS(attack_success), 

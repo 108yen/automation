@@ -246,11 +246,11 @@ proc create_root_design { parentCell } {
 
 
   # Create interface ports
-  set push_buttons_4bits [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 push_buttons_4bits ]
   set rgb_led [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 rgb_led ]
   set usb_uart [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:uart_rtl:1.0 usb_uart ]
 
   # Create ports
+  set BTN_0 [ create_bd_port -dir I BTN_0 ]
   set can_signal_in [ create_bd_port -dir I can_signal_in ]
   set debug [ create_bd_port -dir O debug ]
   set debug_1 [ create_bd_port -dir O debug_1 ]
@@ -363,7 +363,6 @@ proc create_root_design { parentCell } {
  ] $rst_clk_wiz_1_100M
 
   # Create interface connections
-  connect_bd_intf_net -intf_net axi_gpio_0_GPIO [get_bd_intf_ports push_buttons_4bits] [get_bd_intf_pins axi_gpio_0/GPIO]
   connect_bd_intf_net -intf_net axi_gpio_0_GPIO2 [get_bd_intf_ports rgb_led] [get_bd_intf_pins axi_gpio_0/GPIO2]
   connect_bd_intf_net -intf_net axi_uartlite_0_UART [get_bd_intf_ports usb_uart] [get_bd_intf_pins axi_uartlite_0/UART]
   connect_bd_intf_net -intf_net microblaze_0_M_AXI_DP [get_bd_intf_pins microblaze_0/M_AXI_DP] [get_bd_intf_pins microblaze_0_axi_periph/S00_AXI]
@@ -376,6 +375,7 @@ proc create_root_design { parentCell } {
   connect_bd_intf_net -intf_net microblaze_0_ilmb_1 [get_bd_intf_pins microblaze_0/ILMB] [get_bd_intf_pins microblaze_0_local_memory/ILMB]
 
   # Create port connections
+  connect_bd_net -net BTN_0_1 [get_bd_ports BTN_0] [get_bd_pins MODULE_CONTROLLER_0/BTN_0]
   connect_bd_net -net MODULE_CONTROLLER_0_ARRAY [get_bd_pins MODULE_CONTROLLER_0/ARRAY] [get_bd_pins axi_gpio_2/gpio2_io_i]
   connect_bd_net -net MODULE_CONTROLLER_0_DEBUG [get_bd_ports debug] [get_bd_pins MODULE_CONTROLLER_0/DEBUG]
   connect_bd_net -net MODULE_CONTROLLER_0_DEBUG_1 [get_bd_ports debug_1] [get_bd_pins MODULE_CONTROLLER_0/DEBUG_1]

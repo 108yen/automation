@@ -15,3 +15,8 @@ set_property PACKAGE_PIN A18 [get_ports debug_2]
 set_property IOSTANDARD LVCMOS33 [get_ports debug]
 set_property IOSTANDARD LVCMOS33 [get_ports debug_1]
 set_property IOSTANDARD LVCMOS33 [get_ports debug_2]
+
+set_property IOSTANDARD LVCMOS33 [get_ports BTN_0]
+
+
+set_property PACKAGE_PIN D9 [get_ports BTN_0]

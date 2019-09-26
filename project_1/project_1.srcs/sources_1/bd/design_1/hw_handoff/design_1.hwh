@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<EDKSYSTEM EDWVERSION="1.2" TIMESTAMP="Tue Sep 24 03:42:57 2019" VIVADOVERSION="2018.3">
+<EDKSYSTEM EDWVERSION="1.2" TIMESTAMP="Thu Sep 26 17:41:10 2019" VIVADOVERSION="2018.3">
 
   <SYSTEMINFO ARCH="artix7" BOARD="digilentinc.com:arty-a7-35:part0:1.0" DEVICE="7a35ti" NAME="design_1" PACKAGE="csg324" SPEEDGRADE="-1L"/>
 
@@ -55,11 +55,6 @@
         <CONNECTION INSTANCE="MODULE_CONTROLLER_0" PORT="DEBUG_2"/>
       </CONNECTIONS>
     </PORT>
-    <PORT DIR="I" LEFT="3" NAME="push_buttons_4bits_tri_i" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_0_gpio_io_i">
-      <CONNECTIONS>
-        <CONNECTION INSTANCE="axi_gpio_0" PORT="gpio_io_i"/>
-      </CONNECTIONS>
-    </PORT>
     <PORT DIR="I" NAME="usb_uart_rxd" SIGIS="undef" SIGNAME="axi_uartlite_0_rx">
       <CONNECTIONS>
         <CONNECTION INSTANCE="axi_uartlite_0" PORT="rx"/>
@@ -85,6 +80,11 @@
         <CONNECTION INSTANCE="axi_gpio_0" PORT="gpio2_io_t"/>
       </CONNECTIONS>
     </PORT>
+    <PORT DIR="I" NAME="BTN_0" SIGIS="undef" SIGNAME="External_Ports_BTN_0">
+      <CONNECTIONS>
+        <CONNECTION INSTANCE="MODULE_CONTROLLER_0" PORT="BTN_0"/>
+      </CONNECTIONS>
+    </PORT>
   </EXTERNALPORTS>
 
   <EXTERNALINTERFACES>
@@ -92,11 +92,6 @@
       <PORTMAPS>
         <PORTMAP LOGICAL="RxD" PHYSICAL="usb_uart_rxd"/>
         <PORTMAP LOGICAL="TxD" PHYSICAL="usb_uart_txd"/>
-      </PORTMAPS>
-    </BUSINTERFACE>
-    <BUSINTERFACE BUSNAME="axi_gpio_0_GPIO" NAME="push_buttons_4bits" TYPE="INITIATOR">
-      <PORTMAPS>
-        <PORTMAP LOGICAL="TRI_I" PHYSICAL="push_buttons_4bits_tri_i"/>
       </PORTMAPS>
     </BUSINTERFACE>
     <BUSINTERFACE BUSNAME="axi_gpio_0_GPIO2" NAME="rgb_led" TYPE="INITIATOR">
@@ -129,6 +124,11 @@
         <PORT DIR="I" NAME="ATTACK_PERMIT" SIGIS="undef" SIGNAME="External_Ports_switch_0">
           <CONNECTIONS>
             <CONNECTION INSTANCE="External_Ports" PORT="switch_0"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="BTN_0" SIGIS="undef" SIGNAME="External_Ports_BTN_0">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="External_Ports" PORT="BTN_0"/>
           </CONNECTIONS>
         </PORT>
         <PORT DIR="I" LEFT="7" NAME="DEBUG_COUNT" RIGHT="0" SIGIS="undef"/>
@@ -480,11 +480,7 @@
             <CONNECTION INSTANCE="microblaze_0_axi_periph" PORT="M01_AXI_rready"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" LEFT="3" NAME="gpio_io_i" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_0_gpio_io_i">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="design_1_imp" PORT="push_buttons_4bits_tri_i"/>
-          </CONNECTIONS>
-        </PORT>
+        <PORT DIR="I" LEFT="3" NAME="gpio_io_i" RIGHT="0" SIGIS="undef"/>
         <PORT DIR="I" LEFT="11" NAME="gpio2_io_i" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_0_gpio2_io_i">
           <CONNECTIONS>
             <CONNECTION INSTANCE="design_1_imp" PORT="rgb_led_tri_i"/>
@@ -554,7 +550,7 @@
             <PORTMAP LOGICAL="WVALID" PHYSICAL="s_axi_wvalid"/>
           </PORTMAPS>
         </BUSINTERFACE>
-        <BUSINTERFACE BUSNAME="axi_gpio_0_GPIO" NAME="GPIO" TYPE="INITIATOR" VLNV="xilinx.com:interface:gpio:1.0">
+        <BUSINTERFACE BUSNAME="__NOC__" NAME="GPIO" TYPE="INITIATOR" VLNV="xilinx.com:interface:gpio:1.0">
           <PORTMAPS>
             <PORTMAP LOGICAL="TRI_I" PHYSICAL="gpio_io_i"/>
           </PORTMAPS>
