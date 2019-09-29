@@ -1,7 +1,7 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0xD05508E91047D020",
+      "boundary_crc": "0xED14BF59E6ED4343",
       "device": "xc7a35ticsg324-1L",
       "name": "design_1",
       "synth_flow_mode": "Hierarchical",
@@ -38,10 +38,6 @@
       "usb_uart": {
         "mode": "Master",
         "vlnv": "xilinx.com:interface:uart_rtl:1.0"
-      },
-      "rgb_led": {
-        "mode": "Master",
-        "vlnv": "xilinx.com:interface:gpio_rtl:1.0"
       }
     },
     "ports": {
@@ -751,16 +747,16 @@
           }
         },
         "interface_nets": {
-          "m03_couplers_to_microblaze_0_axi_periph": {
-            "interface_ports": [
-              "M03_AXI",
-              "m03_couplers/M_AXI"
-            ]
-          },
           "xbar_to_m02_couplers": {
             "interface_ports": [
               "xbar/M02_AXI",
               "m02_couplers/S_AXI"
+            ]
+          },
+          "m03_couplers_to_microblaze_0_axi_periph": {
+            "interface_ports": [
+              "M03_AXI",
+              "m03_couplers/M_AXI"
             ]
           },
           "xbar_to_m03_couplers": {
@@ -775,16 +771,16 @@
               "s00_couplers/S_AXI"
             ]
           },
-          "m00_couplers_to_microblaze_0_axi_periph": {
-            "interface_ports": [
-              "M00_AXI",
-              "m00_couplers/M_AXI"
-            ]
-          },
           "s00_couplers_to_xbar": {
             "interface_ports": [
               "s00_couplers/M_AXI",
               "xbar/S00_AXI"
+            ]
+          },
+          "m00_couplers_to_microblaze_0_axi_periph": {
+            "interface_ports": [
+              "M00_AXI",
+              "m00_couplers/M_AXI"
             ]
           },
           "xbar_to_m00_couplers": {
@@ -799,16 +795,16 @@
               "m01_couplers/M_AXI"
             ]
           },
-          "m02_couplers_to_microblaze_0_axi_periph": {
-            "interface_ports": [
-              "M02_AXI",
-              "m02_couplers/M_AXI"
-            ]
-          },
           "xbar_to_m01_couplers": {
             "interface_ports": [
               "xbar/M01_AXI",
               "m01_couplers/S_AXI"
+            ]
+          },
+          "m02_couplers_to_microblaze_0_axi_periph": {
+            "interface_ports": [
+              "M02_AXI",
+              "m02_couplers/M_AXI"
             ]
           }
         },
@@ -851,11 +847,29 @@
         "vlnv": "xilinx.com:ip:axi_gpio:2.0",
         "xci_name": "design_1_axi_gpio_0_0",
         "parameters": {
+          "C_ALL_INPUTS": {
+            "value": "0"
+          },
+          "C_ALL_INPUTS_2": {
+            "value": "1"
+          },
+          "C_ALL_OUTPUTS": {
+            "value": "1"
+          },
+          "C_GPIO2_WIDTH": {
+            "value": "32"
+          },
+          "C_GPIO_WIDTH": {
+            "value": "32"
+          },
+          "C_IS_DUAL": {
+            "value": "1"
+          },
           "GPIO2_BOARD_INTERFACE": {
-            "value": "rgb_led"
+            "value": "Custom"
           },
           "GPIO_BOARD_INTERFACE": {
-            "value": "push_buttons_4bits"
+            "value": "Custom"
           },
           "USE_BOARD_FLOW": {
             "value": "true"
@@ -932,6 +946,11 @@
           "CAN_SIGNAL_IN": {
             "direction": "I"
           },
+          "SEARCH_NUM_INC": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
           "TO_DOMINANT": {
             "direction": "IO"
           },
@@ -956,7 +975,12 @@
             "left": "31",
             "right": "0"
           },
-          "ARRAY": {
+          "ARRAY_0": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          },
+          "ARRAY_1": {
             "direction": "O",
             "left": "31",
             "right": "0"
@@ -1002,12 +1026,6 @@
         "interface_ports": [
           "microblaze_0/DLMB",
           "microblaze_0_local_memory/DLMB"
-        ]
-      },
-      "axi_gpio_0_GPIO2": {
-        "interface_ports": [
-          "rgb_led",
-          "axi_gpio_0/GPIO2"
         ]
       },
       "axi_uartlite_0_UART": {
@@ -1173,15 +1191,9 @@
           "debug_2"
         ]
       },
-      "MODULE_CONTROLLER_0_SEARCH_NUM": {
-        "ports": [
-          "MODULE_CONTROLLER_0/SEARCH_NUM",
-          "axi_gpio_2/gpio_io_i"
-        ]
-      },
       "MODULE_CONTROLLER_0_ARRAY": {
         "ports": [
-          "MODULE_CONTROLLER_0/ARRAY",
+          "MODULE_CONTROLLER_0/ARRAY_1",
           "axi_gpio_2/gpio2_io_i"
         ]
       },
@@ -1189,6 +1201,24 @@
         "ports": [
           "BTN_0",
           "MODULE_CONTROLLER_0/BTN_0"
+        ]
+      },
+      "MODULE_CONTROLLER_0_ARRAY_0": {
+        "ports": [
+          "MODULE_CONTROLLER_0/ARRAY_0",
+          "axi_gpio_2/gpio_io_i"
+        ]
+      },
+      "MODULE_CONTROLLER_0_SEARCH_NUM": {
+        "ports": [
+          "MODULE_CONTROLLER_0/SEARCH_NUM",
+          "axi_gpio_0/gpio2_io_i"
+        ]
+      },
+      "axi_gpio_0_gpio_io_o": {
+        "ports": [
+          "axi_gpio_0/gpio_io_o",
+          "MODULE_CONTROLLER_0/SEARCH_NUM_INC"
         ]
       }
     },

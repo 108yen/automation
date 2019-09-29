@@ -76,12 +76,12 @@
  * The following constant is used to determine which channel of the GPIO is
  * used for the LED if there are 2 channels supported.
  */
-#define BUTTON_CHANNEL 1
-#define LED_CHANNEL 2
+#define SEARCH_INC_TRIG 1
+#define SEARCH_NUM_CHANNEL 2
 #define SUCCESS_RATE_CHANNEL 1
 #define STATE_CHANNEL 2
-#define SEARCH_NUM_CHANNEL 1
-#define ARRAY_CHANNEL 2
+#define ARRAY_0_CHANNEL 1
+#define ARRAY_1_CHANNEL 2
 
 #define IN 1
 #define OUT 0
@@ -117,6 +117,7 @@
 
 //void print_progress(void);
 void print_success_rate(int success_rate);
+void get_trg();
 
 /************************** Variable Definitions *****************************/
 
@@ -158,7 +159,7 @@ int main(void)
 	int not_achieved = 0;
 	int search_num = 0;
 	int all_searched = 0;
-	int array[8] = {};	//でバグ用
+	int array[16] = {};	//でバグ用
 	int i;
 //	int st, end;
 
@@ -181,12 +182,12 @@ int main(void)
 	}
 
 	/* Set the direction for all signals as inputs except the LED output */
-	XGpio_SetDataDirection(&IO_Gpio, LED_CHANNEL, OUT);
-	XGpio_SetDataDirection(&IO_Gpio, BUTTON_CHANNEL, IN);
+	XGpio_SetDataDirection(&IO_Gpio, SEARCH_NUM_CHANNEL, IN);
+	XGpio_SetDataDirection(&IO_Gpio, SEARCH_INC_TRIG, OUT);
 	XGpio_SetDataDirection(&out_Gpio, SUCCESS_RATE_CHANNEL, IN);
 	XGpio_SetDataDirection(&out_Gpio, STATE_CHANNEL, IN);
-	XGpio_SetDataDirection(&num_Gpio, SEARCH_NUM_CHANNEL, IN);
-	XGpio_SetDataDirection(&num_Gpio, ARRAY_CHANNEL, IN);
+	XGpio_SetDataDirection(&num_Gpio, ARRAY_0_CHANNEL, IN);
+	XGpio_SetDataDirection(&num_Gpio, ARRAY_1_CHANNEL, IN);
 
 
 	/* Loop forever blinking the LED */
@@ -213,7 +214,10 @@ int main(void)
 		/*下位8ビットに情報が入っているので取り出す*/
 		state = XGpio_DiscreteRead(&out_Gpio, STATE_CHANNEL);
 		for(i=0; i<8; i++){
-			array[i] = (XGpio_DiscreteRead(&num_Gpio, ARRAY_CHANNEL) >> 4*(7 - i)) & 0xF;
+			array[i] = (XGpio_DiscreteRead(&num_Gpio, ARRAY_0_CHANNEL) >> 4*(7 - i)) & 0xF;
+		}
+		for(i=8; i<16; i++){
+			array[i] = (XGpio_DiscreteRead(&num_Gpio, ARRAY_1_CHANNEL) >> 4*(7 - i)) & 0xF;
 		}
 
 		MB_Sleep(5);
@@ -254,14 +258,15 @@ int main(void)
 
 		if(search){
 //			end = clock();
-			search_num = XGpio_DiscreteRead(&num_Gpio, SEARCH_NUM_CHANNEL);
+			search_num = XGpio_DiscreteRead(&IO_Gpio, SEARCH_NUM_CHANNEL);
 			printf("\narray[0] = %d, array[1] = %d, array[2] = %d, array[3] = %d, array[4] = %d, array[5] = %d, array[6] = %d, array[7] = %d\n", array[0],array[1],array[2],array[3],array[4],array[5],array[6],array[7]);
+			printf("array[8] = %d, array[9] = %d, array[10] = %d, array[11] = %d, array[12] = %d, array[13] = %d, array[14] = %d, array[15] = %d\n", array[8],array[9],array[10],array[11],array[12],array[13],array[14],array[15]);
 			printf("progress = %9d  %3.1f %% \n", search_num, ((float)search_num/4782969)*100);	//9765625
 //			printf("progress = %9d  %3.1f %% \n", search_num, ((float)search_num/39062500)*100);	//1bit目の改ざんも探索
 //			printf("progress = %9d  %3.1f %% \n", search_num, ((float)search_num/282475249)*100);	//7^10
 //			printf("progress = %10d  %3.1f %% \n", search_num, ((float)search_num/3486784401)*100);	//9^10
 //			printf("time = %10d s\n", (end - st));
-			printf("\x1b[3A");
+			printf("\x1b[4A");
 		}
 
 		if(attack_count != pre_attack_count && !all_searched){
@@ -276,12 +281,22 @@ int main(void)
 			//			xil_printf("achieved = %d, not_achieved = %d\n", achieved, not_achieved);
 			//			xil_printf("search = %d\n",state&(1<<1));
 		}
+		get_trg();
 	}
 
 	xil_printf("Successfully ran Gpio Example\r\n");
 	return XST_SUCCESS;
 }
 
+static int pls=0;
+void get_trg(){
+
+	getchar();
+
+	pls==1 ? (pls = 0) : (pls = 1);
+	printf("%d",pls);
+	XGpio_DiscreteWrite(&IO_Gpio, SEARCH_INC_TRIG, pls);
+}
 
 void print_success_rate(int success_rate){
 

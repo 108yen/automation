@@ -1,7 +1,7 @@
 //Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2018.3 (win64) Build 2405991 Thu Dec  6 23:38:27 MST 2018
-//Date        : Thu Sep 26 17:41:10 2019
+//Date        : Sun Sep 29 13:58:17 2019
 //Host        : DESKTOP-NTANC38 running 64-bit major release  (build 9200)
 //Command     : generate_target design_1.bd
 //Design      : design_1
@@ -17,9 +17,6 @@ module design_1
     debug_1,
     debug_2,
     reset,
-    rgb_led_tri_i,
-    rgb_led_tri_o,
-    rgb_led_tri_t,
     switch_0,
     sys_clock,
     to_dominant,
@@ -33,9 +30,6 @@ module design_1
   output debug_1;
   output debug_2;
   (* X_INTERFACE_INFO = "xilinx.com:signal:reset:1.0 RST.RESET RST" *) (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME RST.RESET, INSERT_VIP 0, POLARITY ACTIVE_LOW" *) input reset;
-  (* X_INTERFACE_INFO = "xilinx.com:interface:gpio:1.0 rgb_led TRI_I" *) input [11:0]rgb_led_tri_i;
-  (* X_INTERFACE_INFO = "xilinx.com:interface:gpio:1.0 rgb_led TRI_O" *) output [11:0]rgb_led_tri_o;
-  (* X_INTERFACE_INFO = "xilinx.com:interface:gpio:1.0 rgb_led TRI_T" *) output [11:0]rgb_led_tri_t;
   input switch_0;
   (* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 CLK.SYS_CLOCK CLK" *) (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME CLK.SYS_CLOCK, CLK_DOMAIN design_1_sys_clock, FREQ_HZ 100000000, INSERT_VIP 0, PHASE 0.000" *) input sys_clock;
   inout to_dominant;
@@ -46,6 +40,7 @@ module design_1
 
   wire BTN_0_1;
   wire [31:0]MODULE_CONTROLLER_0_ARRAY;
+  wire [31:0]MODULE_CONTROLLER_0_ARRAY_0;
   wire MODULE_CONTROLLER_0_DEBUG;
   wire MODULE_CONTROLLER_0_DEBUG_1;
   wire MODULE_CONTROLLER_0_DEBUG_2;
@@ -55,9 +50,7 @@ module design_1
   wire MODULE_CONTROLLER_0_TRIGER;
   wire Net;
   wire Net1;
-  wire [11:0]axi_gpio_0_GPIO2_TRI_I;
-  wire [11:0]axi_gpio_0_GPIO2_TRI_O;
-  wire [11:0]axi_gpio_0_GPIO2_TRI_T;
+  wire [31:0]axi_gpio_0_gpio_io_o;
   wire axi_uartlite_0_UART_RxD;
   wire axi_uartlite_0_UART_TxD;
   wire can_signal_in_1;
@@ -188,21 +181,19 @@ module design_1
   wire sys_clock_1;
 
   assign BTN_0_1 = BTN_0;
-  assign axi_gpio_0_GPIO2_TRI_I = rgb_led_tri_i[11:0];
   assign axi_uartlite_0_UART_RxD = usb_uart_rxd;
   assign can_signal_in_1 = can_signal_in;
   assign debug = MODULE_CONTROLLER_0_DEBUG;
   assign debug_1 = MODULE_CONTROLLER_0_DEBUG_1;
   assign debug_2 = MODULE_CONTROLLER_0_DEBUG_2;
   assign reset_1 = reset;
-  assign rgb_led_tri_o[11:0] = axi_gpio_0_GPIO2_TRI_O;
-  assign rgb_led_tri_t[11:0] = axi_gpio_0_GPIO2_TRI_T;
   assign switch_0_1 = switch_0;
   assign sys_clock_1 = sys_clock;
   assign triger = MODULE_CONTROLLER_0_TRIGER;
   assign usb_uart_txd = axi_uartlite_0_UART_TxD;
   design_1_MODULE_CONTROLLER_0_0 MODULE_CONTROLLER_0
-       (.ARRAY(MODULE_CONTROLLER_0_ARRAY),
+       (.ARRAY_0(MODULE_CONTROLLER_0_ARRAY_0),
+        .ARRAY_1(MODULE_CONTROLLER_0_ARRAY),
         .ATTACK_PERMIT(switch_0_1),
         .BTN_0(BTN_0_1),
         .CAN_SIGNAL_IN(can_signal_in_1),
@@ -214,15 +205,14 @@ module design_1
         .OPERATING_STATE(MODULE_CONTROLLER_0_OPERATING_STATE),
         .RESET(clk_wiz_1_locked),
         .SEARCH_NUM(MODULE_CONTROLLER_0_SEARCH_NUM),
+        .SEARCH_NUM_INC(axi_gpio_0_gpio_io_o),
         .SUCCESS_RATE(MODULE_CONTROLLER_0_SUCCESS_RATE),
         .TO_DOMINANT(to_dominant),
         .TO_RECESSIVE(to_recessive),
         .TRIGER(MODULE_CONTROLLER_0_TRIGER));
   design_1_axi_gpio_0_0 axi_gpio_0
-       (.gpio2_io_i(axi_gpio_0_GPIO2_TRI_I),
-        .gpio2_io_o(axi_gpio_0_GPIO2_TRI_O),
-        .gpio2_io_t(axi_gpio_0_GPIO2_TRI_T),
-        .gpio_io_i({1'b0,1'b0,1'b0,1'b0}),
+       (.gpio2_io_i(MODULE_CONTROLLER_0_SEARCH_NUM),
+        .gpio_io_o(axi_gpio_0_gpio_io_o),
         .s_axi_aclk(microblaze_0_Clk),
         .s_axi_araddr(microblaze_0_axi_periph_M01_AXI_ARADDR[8:0]),
         .s_axi_aresetn(rst_clk_wiz_1_100M_peripheral_aresetn),
@@ -266,7 +256,7 @@ module design_1
         .s_axi_wvalid(microblaze_0_axi_periph_M02_AXI_WVALID));
   design_1_axi_gpio_2_0 axi_gpio_2
        (.gpio2_io_i(MODULE_CONTROLLER_0_ARRAY),
-        .gpio_io_i(MODULE_CONTROLLER_0_SEARCH_NUM),
+        .gpio_io_i(MODULE_CONTROLLER_0_ARRAY_0),
         .s_axi_aclk(microblaze_0_Clk),
         .s_axi_araddr(microblaze_0_axi_periph_M03_AXI_ARADDR[8:0]),
         .s_axi_aresetn(rst_clk_wiz_1_100M_peripheral_aresetn),

@@ -61,13 +61,15 @@ module design_1_MODULE_CONTROLLER_0_0 (
   BTN_0,
   DEBUG_COUNT,
   CAN_SIGNAL_IN,
+  SEARCH_NUM_INC,
   TO_DOMINANT,
   TO_RECESSIVE,
   TRIGER,
   OPERATING_STATE,
   SUCCESS_RATE,
   SEARCH_NUM,
-  ARRAY,
+  ARRAY_0,
+  ARRAY_1,
   DEBUG,
   DEBUG_1,
   DEBUG_2
@@ -83,13 +85,15 @@ input wire ATTACK_PERMIT;
 input wire BTN_0;
 input wire [7 : 0] DEBUG_COUNT;
 input wire CAN_SIGNAL_IN;
+input wire [31 : 0] SEARCH_NUM_INC;
 inout wire TO_DOMINANT;
 inout wire TO_RECESSIVE;
 output wire TRIGER;
 output wire [7 : 0] OPERATING_STATE;
 output wire [31 : 0] SUCCESS_RATE;
 output wire [31 : 0] SEARCH_NUM;
-output wire [31 : 0] ARRAY;
+output wire [31 : 0] ARRAY_0;
+output wire [31 : 0] ARRAY_1;
 output wire DEBUG;
 output wire DEBUG_1;
 output wire DEBUG_2;
@@ -101,13 +105,15 @@ output wire DEBUG_2;
     .BTN_0(BTN_0),
     .DEBUG_COUNT(DEBUG_COUNT),
     .CAN_SIGNAL_IN(CAN_SIGNAL_IN),
+    .SEARCH_NUM_INC(SEARCH_NUM_INC),
     .TO_DOMINANT(TO_DOMINANT),
     .TO_RECESSIVE(TO_RECESSIVE),
     .TRIGER(TRIGER),
     .OPERATING_STATE(OPERATING_STATE),
     .SUCCESS_RATE(SUCCESS_RATE),
     .SEARCH_NUM(SEARCH_NUM),
-    .ARRAY(ARRAY),
+    .ARRAY_0(ARRAY_0),
+    .ARRAY_1(ARRAY_1),
     .DEBUG(DEBUG),
     .DEBUG_1(DEBUG_1),
     .DEBUG_2(DEBUG_2)

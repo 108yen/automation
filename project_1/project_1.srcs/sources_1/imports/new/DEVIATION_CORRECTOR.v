@@ -20,11 +20,11 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module DEVIATION_CORRECTOR(CLK, RESET, BTN_0, ATTACK_STATE, FAILURE, ATTACK_SUCCESS, DEVIATION, OUT_SUCCESS_RATE, SEARCH_NUM, OUT_STATE);
+module DEVIATION_CORRECTOR(CLK, RESET, SEARCH_NUM_INC, ATTACK_STATE, FAILURE, ATTACK_SUCCESS, DEVIATION, OUT_SUCCESS_RATE, SEARCH_NUM, OUT_STATE);
 
     input CLK;
     input RESET;
-    input BTN_0;
+    input [31:0]SEARCH_NUM_INC;
     input ATTACK_STATE;
     input FAILURE;
     input ATTACK_SUCCESS;
@@ -40,7 +40,7 @@ module DEVIATION_CORRECTOR(CLK, RESET, BTN_0, ATTACK_STATE, FAILURE, ATTACK_SUCC
     parameter EXIT_CONDITION = 8'd2;
     
     reg [7:0] array[59:0];
-    reg [1:0]BTN_0_reg;
+    reg [1:0]search_num_inc_reg;
     reg search;
     reg fin_search;
     reg [7:0]num;
@@ -79,7 +79,7 @@ module DEVIATION_CORRECTOR(CLK, RESET, BTN_0, ATTACK_STATE, FAILURE, ATTACK_SUCC
                 array[i] <= 8'b0;
             end
             SEARCH_NUM <= 0;
-        end else if(BTN_0_reg == 2'b10 && search) begin  //’Tõ   ‰ü‚´‚ñ–ˆ
+        end else if((search_num_inc_reg == 2'b10 || search_num_inc_reg == 2'b01) && search) begin  //’Tõ   ‰ü‚´‚ñ–ˆ
             inc_array(8'b0);
             SEARCH_NUM <= SEARCH_NUM + 1;
         end
@@ -130,9 +130,9 @@ module DEVIATION_CORRECTOR(CLK, RESET, BTN_0, ATTACK_STATE, FAILURE, ATTACK_SUCC
     
     always @(posedge CLK) begin
         if(~RESET) begin
-            BTN_0_reg <= 2'b00;
+            search_num_inc_reg <= 2'b00;
         end else begin
-            BTN_0_reg <= {BTN_0_reg[0],BTN_0};
+            search_num_inc_reg <= {search_num_inc_reg[0],SEARCH_NUM_INC[0]};
         end
     end
     

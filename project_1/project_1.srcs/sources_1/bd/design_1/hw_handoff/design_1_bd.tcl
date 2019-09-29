@@ -246,7 +246,6 @@ proc create_root_design { parentCell } {
 
 
   # Create interface ports
-  set rgb_led [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 rgb_led ]
   set usb_uart [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:uart_rtl:1.0 usb_uart ]
 
   # Create ports
@@ -283,12 +282,15 @@ proc create_root_design { parentCell } {
   # Create instance: axi_gpio_0, and set properties
   set axi_gpio_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_gpio_0 ]
   set_property -dict [ list \
-   CONFIG.C_ALL_INPUTS {1} \
-   CONFIG.C_GPIO2_WIDTH {12} \
-   CONFIG.C_GPIO_WIDTH {4} \
+   CONFIG.C_ALL_INPUTS {0} \
+   CONFIG.C_ALL_INPUTS_2 {1} \
+   CONFIG.C_ALL_OUTPUTS {1} \
+   CONFIG.C_ALL_OUTPUTS_2 {0} \
+   CONFIG.C_GPIO2_WIDTH {32} \
+   CONFIG.C_GPIO_WIDTH {32} \
    CONFIG.C_IS_DUAL {1} \
-   CONFIG.GPIO2_BOARD_INTERFACE {rgb_led} \
-   CONFIG.GPIO_BOARD_INTERFACE {push_buttons_4bits} \
+   CONFIG.GPIO2_BOARD_INTERFACE {Custom} \
+   CONFIG.GPIO_BOARD_INTERFACE {Custom} \
    CONFIG.USE_BOARD_FLOW {true} \
  ] $axi_gpio_0
 
@@ -363,7 +365,6 @@ proc create_root_design { parentCell } {
  ] $rst_clk_wiz_1_100M
 
   # Create interface connections
-  connect_bd_intf_net -intf_net axi_gpio_0_GPIO2 [get_bd_intf_ports rgb_led] [get_bd_intf_pins axi_gpio_0/GPIO2]
   connect_bd_intf_net -intf_net axi_uartlite_0_UART [get_bd_intf_ports usb_uart] [get_bd_intf_pins axi_uartlite_0/UART]
   connect_bd_intf_net -intf_net microblaze_0_M_AXI_DP [get_bd_intf_pins microblaze_0/M_AXI_DP] [get_bd_intf_pins microblaze_0_axi_periph/S00_AXI]
   connect_bd_intf_net -intf_net microblaze_0_axi_periph_M00_AXI [get_bd_intf_pins axi_uartlite_0/S_AXI] [get_bd_intf_pins microblaze_0_axi_periph/M00_AXI]
@@ -376,16 +377,18 @@ proc create_root_design { parentCell } {
 
   # Create port connections
   connect_bd_net -net BTN_0_1 [get_bd_ports BTN_0] [get_bd_pins MODULE_CONTROLLER_0/BTN_0]
-  connect_bd_net -net MODULE_CONTROLLER_0_ARRAY [get_bd_pins MODULE_CONTROLLER_0/ARRAY] [get_bd_pins axi_gpio_2/gpio2_io_i]
+  connect_bd_net -net MODULE_CONTROLLER_0_ARRAY [get_bd_pins MODULE_CONTROLLER_0/ARRAY_1] [get_bd_pins axi_gpio_2/gpio2_io_i]
+  connect_bd_net -net MODULE_CONTROLLER_0_ARRAY_0 [get_bd_pins MODULE_CONTROLLER_0/ARRAY_0] [get_bd_pins axi_gpio_2/gpio_io_i]
   connect_bd_net -net MODULE_CONTROLLER_0_DEBUG [get_bd_ports debug] [get_bd_pins MODULE_CONTROLLER_0/DEBUG]
   connect_bd_net -net MODULE_CONTROLLER_0_DEBUG_1 [get_bd_ports debug_1] [get_bd_pins MODULE_CONTROLLER_0/DEBUG_1]
   connect_bd_net -net MODULE_CONTROLLER_0_DEBUG_2 [get_bd_ports debug_2] [get_bd_pins MODULE_CONTROLLER_0/DEBUG_2]
   connect_bd_net -net MODULE_CONTROLLER_0_OPERATING_STATE [get_bd_pins MODULE_CONTROLLER_0/OPERATING_STATE] [get_bd_pins axi_gpio_1/gpio2_io_i]
-  connect_bd_net -net MODULE_CONTROLLER_0_SEARCH_NUM [get_bd_pins MODULE_CONTROLLER_0/SEARCH_NUM] [get_bd_pins axi_gpio_2/gpio_io_i]
+  connect_bd_net -net MODULE_CONTROLLER_0_SEARCH_NUM [get_bd_pins MODULE_CONTROLLER_0/SEARCH_NUM] [get_bd_pins axi_gpio_0/gpio2_io_i]
   connect_bd_net -net MODULE_CONTROLLER_0_SUCCESS_RATE [get_bd_pins MODULE_CONTROLLER_0/SUCCESS_RATE] [get_bd_pins axi_gpio_1/gpio_io_i]
   connect_bd_net -net MODULE_CONTROLLER_0_TRIGER [get_bd_ports triger] [get_bd_pins MODULE_CONTROLLER_0/TRIGER]
   connect_bd_net -net Net [get_bd_ports to_dominant] [get_bd_pins MODULE_CONTROLLER_0/TO_DOMINANT]
   connect_bd_net -net Net1 [get_bd_ports to_recessive] [get_bd_pins MODULE_CONTROLLER_0/TO_RECESSIVE]
+  connect_bd_net -net axi_gpio_0_gpio_io_o [get_bd_pins MODULE_CONTROLLER_0/SEARCH_NUM_INC] [get_bd_pins axi_gpio_0/gpio_io_o]
   connect_bd_net -net can_signal_in_1 [get_bd_ports can_signal_in] [get_bd_pins MODULE_CONTROLLER_0/CAN_SIGNAL_IN]
   connect_bd_net -net clk_wiz_1_clk_out2 [get_bd_pins MODULE_CONTROLLER_0/CLK] [get_bd_pins clk_wiz_1/clk_out2]
   connect_bd_net -net clk_wiz_1_locked [get_bd_pins MODULE_CONTROLLER_0/RESET] [get_bd_pins clk_wiz_1/locked] [get_bd_pins rst_clk_wiz_1_100M/dcm_locked]

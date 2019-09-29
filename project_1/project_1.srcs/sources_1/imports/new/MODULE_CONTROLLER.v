@@ -20,20 +20,22 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, BTN_0, DEBUG_COUNT, CAN_SIGNAL_IN, TO_DOMINANT, TO_RECESSIVE, TRIGER, OPERATING_STATE, SUCCESS_RATE, SEARCH_NUM, ARRAY, DEBUG, DEBUG_1, DEBUG_2);
+module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, BTN_0, DEBUG_COUNT, CAN_SIGNAL_IN, SEARCH_NUM_INC, TO_DOMINANT, TO_RECESSIVE, TRIGER, OPERATING_STATE, SUCCESS_RATE, SEARCH_NUM, ARRAY_0, ARRAY_1, DEBUG, DEBUG_1, DEBUG_2);
     input CLK; //40MHz 25ns 1TQ=125ns=5ÉNÉçÉbÉN
     input RESET;
     input ATTACK_PERMIT;
     input BTN_0;
     input [7:0]DEBUG_COUNT;
     input CAN_SIGNAL_IN;
+    input [31:0]SEARCH_NUM_INC;
     inout TO_DOMINANT;
     inout TO_RECESSIVE;
     output TRIGER;
     output [7:0]OPERATING_STATE;
     output [31:0]SUCCESS_RATE;
     output [31:0]SEARCH_NUM;
-    output [31:0]ARRAY;
+    output [31:0]ARRAY_0;
+    output [31:0]ARRAY_1;
     output DEBUG;
     output reg DEBUG_1;
     output reg DEBUG_2;
@@ -63,8 +65,8 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, BTN_0, DEBUG_COUNT, CAN_SIGN
     reg [7:0]pre_r_counter;
     
     assign OPERATING_STATE = {4'b0, _attack_permit, out_state};
-//    assign ARRAY = {deviation[451:448], deviation[443:440], deviation[435:432], deviation[427:424], deviation[419:416], deviation[411:408], deviation[403:400], deviation[395:392]};
-    assign ARRAY = {deviation[475:472], deviation[467:464], deviation[459:456], deviation[451:448], deviation[443:440], deviation[435:432], deviation[427:424], deviation[419:416]};
+    assign ARRAY_1 = {deviation[411:408], deviation[403:400], deviation[395:392], deviation[387:384], deviation[379:376], deviation[371:368], deviation[363:360], deviation[355:352]};
+    assign ARRAY_0 = {deviation[475:472], deviation[467:464], deviation[459:456], deviation[451:448], deviation[443:440], deviation[435:432], deviation[427:424], deviation[419:416]};
 //    resyn
     assign DEBUG = attack_signal_generator.resyn_bit;
 //    assign DEBUG = communication_observation.accept_frame;
@@ -511,7 +513,7 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, BTN_0, DEBUG_COUNT, CAN_SIGN
     DEVIATION_CORRECTOR deviation_corrector(
         .CLK(CLK), 
         .RESET(RESET),
-        .BTN_0(BTN_0),
+        .SEARCH_NUM_INC(SEARCH_NUM_INC),
         .ATTACK_STATE(attack_state), 
         .FAILURE(failure), 
         .ATTACK_SUCCESS(attack_success), 

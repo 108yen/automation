@@ -1,7 +1,7 @@
 // Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2018.3 (win64) Build 2405991 Thu Dec  6 23:38:27 MST 2018
-// Date        : Thu Sep 26 17:27:37 2019
+// Date        : Sun Sep 29 13:48:29 2019
 // Host        : DESKTOP-NTANC38 running 64-bit major release  (build 9200)
 // Command     : write_verilog -force -mode synth_stub
 //               C:/Users/car_security/vivado/automation/Git/automation/project_1/project_1.srcs/sources_1/bd/design_1/ip/design_1_MODULE_CONTROLLER_0_0/design_1_MODULE_CONTROLLER_0_0_stub.v
@@ -15,22 +15,24 @@
 // Please paste the declaration into a Verilog source file or add the file as an additional source.
 (* X_CORE_INFO = "MODULE_CONTROLLER,Vivado 2018.3" *)
 module design_1_MODULE_CONTROLLER_0_0(CLK, RESET, ATTACK_PERMIT, BTN_0, DEBUG_COUNT, 
-  CAN_SIGNAL_IN, TO_DOMINANT, TO_RECESSIVE, TRIGER, OPERATING_STATE, SUCCESS_RATE, SEARCH_NUM, 
-  ARRAY, DEBUG, DEBUG_1, DEBUG_2)
-/* synthesis syn_black_box black_box_pad_pin="CLK,RESET,ATTACK_PERMIT,BTN_0,DEBUG_COUNT[7:0],CAN_SIGNAL_IN,TO_DOMINANT,TO_RECESSIVE,TRIGER,OPERATING_STATE[7:0],SUCCESS_RATE[31:0],SEARCH_NUM[31:0],ARRAY[31:0],DEBUG,DEBUG_1,DEBUG_2" */;
+  CAN_SIGNAL_IN, SEARCH_NUM_INC, TO_DOMINANT, TO_RECESSIVE, TRIGER, OPERATING_STATE, 
+  SUCCESS_RATE, SEARCH_NUM, ARRAY_0, ARRAY_1, DEBUG, DEBUG_1, DEBUG_2)
+/* synthesis syn_black_box black_box_pad_pin="CLK,RESET,ATTACK_PERMIT,BTN_0,DEBUG_COUNT[7:0],CAN_SIGNAL_IN,SEARCH_NUM_INC[31:0],TO_DOMINANT,TO_RECESSIVE,TRIGER,OPERATING_STATE[7:0],SUCCESS_RATE[31:0],SEARCH_NUM[31:0],ARRAY_0[31:0],ARRAY_1[31:0],DEBUG,DEBUG_1,DEBUG_2" */;
   input CLK;
   input RESET;
   input ATTACK_PERMIT;
   input BTN_0;
   input [7:0]DEBUG_COUNT;
   input CAN_SIGNAL_IN;
+  input [31:0]SEARCH_NUM_INC;
   inout TO_DOMINANT;
   inout TO_RECESSIVE;
   output TRIGER;
   output [7:0]OPERATING_STATE;
   output [31:0]SUCCESS_RATE;
   output [31:0]SEARCH_NUM;
-  output [31:0]ARRAY;
+  output [31:0]ARRAY_0;
+  output [31:0]ARRAY_1;
   output DEBUG;
   output DEBUG_1;
   output DEBUG_2;
