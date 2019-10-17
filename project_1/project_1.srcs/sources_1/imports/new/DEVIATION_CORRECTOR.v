@@ -46,6 +46,9 @@ module DEVIATION_CORRECTOR(CLK, RESET, SEARCH_NUM_INC, ATTACK_STATE, FAILURE, AT
     reg [7:0]num;
     reg [15:0]success_rate_reg;
     reg [15:0]count;
+    reg inc_flag;
+    reg [7:0]continuous;
+    reg [1:0]failure_reg;
     integer i;
 //    genvar j;
 
@@ -79,9 +82,15 @@ module DEVIATION_CORRECTOR(CLK, RESET, SEARCH_NUM_INC, ATTACK_STATE, FAILURE, AT
                 array[i] <= 8'b0;
             end
             SEARCH_NUM <= 0;
-        end else if((search_num_inc_reg == 2'b10 || search_num_inc_reg == 2'b01) && search) begin  //’Tõ   ‰ü‚´‚ñ–ˆ
-            inc_array(8'b0);
-            SEARCH_NUM <= SEARCH_NUM + 1;
+            continuous <= 0;
+        end else if(inc_flag && failure_reg == 2'b10 && search) begin  //’Tõ   ‰ü‚´‚ñ–ˆ
+            if(continuous == 8'd10) begin
+                inc_array(8'b0);
+                SEARCH_NUM <= SEARCH_NUM + 1;
+                continuous <= 0;
+            end else begin
+                continuous <= continuous + 1;
+            end
         end
     end
     
@@ -133,6 +142,22 @@ module DEVIATION_CORRECTOR(CLK, RESET, SEARCH_NUM_INC, ATTACK_STATE, FAILURE, AT
             search_num_inc_reg <= 2'b00;
         end else begin
             search_num_inc_reg <= {search_num_inc_reg[0],SEARCH_NUM_INC[0]};
+        end
+    end
+    
+    always @(posedge CLK) begin
+        if(~RESET) begin
+            inc_flag <= 0;
+        end else if(search_num_inc_reg == 2'b10 || search_num_inc_reg == 2'b01) begin
+            inc_flag <= ~inc_flag;
+        end
+    end
+    
+    always @(posedge CLK) begin
+        if(~RESET) begin
+            failure_reg <= 2'b00;
+        end else begin
+            failure_reg <= {failure_reg[0],FAILURE};
         end
     end
     

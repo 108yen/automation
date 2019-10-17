@@ -29,11 +29,11 @@ preplace netloc MODULE_CONTROLLER_0_DEBUG_2 1 6 1 2150J
 preplace netloc MODULE_CONTROLLER_0_ARRAY_0 1 6 1 2110
 preplace netloc MODULE_CONTROLLER_0_SEARCH_NUM 1 6 1 2140
 preplace netloc MODULE_CONTROLLER_0_DEBUG 1 6 1 2150J
-preplace netloc microblaze_0_Clk 1 1 5 210 650 NJ 650 810 650 1310 290 1670
+preplace netloc microblaze_0_Clk 1 1 5 210 650 NJ 650 820 650 1320 290 1670
 preplace netloc microblaze_0_axi_periph_M03_AXI 1 5 1 1630
 preplace netloc microblaze_0_axi_periph_M00_AXI 1 5 1 1650
 preplace netloc microblaze_0_ilmb_1 1 4 1 N
-preplace netloc microblaze_0_M_AXI_DP 1 4 1 1290
+preplace netloc microblaze_0_M_AXI_DP 1 4 1 1300
 preplace netloc BTN_0_1 1 0 6 NJ 150 NJ 150 NJ 150 NJ 150 NJ 150 NJ
 preplace netloc switch_0_1 1 0 6 NJ 130 NJ 130 NJ 130 NJ 130 NJ 130 NJ
 preplace netloc sys_clock_1 1 0 1 NJ
@@ -42,11 +42,11 @@ preplace netloc MODULE_CONTROLLER_0_SUCCESS_RATE 1 6 1 2120
 preplace netloc axi_gpio_0_gpio_io_o 1 5 2 1680 640 2110
 preplace netloc MODULE_CONTROLLER_0_TRIGER 1 6 1 2100J
 preplace netloc MODULE_CONTROLLER_0_OPERATING_STATE 1 6 1 2130
-preplace netloc rst_clk_wiz_1_100M_bus_struct_reset 1 2 3 580 830 NJ 830 1300J
+preplace netloc rst_clk_wiz_1_100M_bus_struct_reset 1 2 3 590 830 NJ 830 1310J
 preplace netloc microblaze_0_axi_periph_M01_AXI 1 5 1 1640
 preplace netloc MODULE_CONTROLLER_0_ARRAY 1 6 1 2100
-preplace netloc rst_clk_wiz_1_100M_peripheral_aresetn 1 2 4 570J 640 NJ 640 1300 300 1620
-preplace netloc rst_clk_wiz_1_100M_mb_reset 1 2 2 N 880 800J
+preplace netloc rst_clk_wiz_1_100M_peripheral_aresetn 1 2 4 580J 640 NJ 640 1310 300 1620
+preplace netloc rst_clk_wiz_1_100M_mb_reset 1 2 2 N 880 810J
 preplace netloc clk_wiz_1_locked 1 1 5 220 110 NJ 110 NJ 110 NJ 110 N
 preplace netloc axi_uartlite_0_UART 1 6 1 2120J
 preplace netloc clk_wiz_1_clk_out2 1 1 5 200J 90 NJ 90 NJ 90 NJ 90 N
@@ -55,10 +55,10 @@ preplace netloc microblaze_0_axi_periph_M02_AXI 1 5 1 1660
 preplace netloc Net1 1 6 1 2100J
 preplace netloc Net 1 6 1 2100J
 preplace netloc microblaze_0_debug 1 3 1 N
-preplace netloc reset_1 1 0 2 20 900 NJ
-preplace netloc mdm_1_debug_sys_rst 1 1 3 230 670 NJ 670 800
+preplace netloc reset_1 1 0 2 10 900 NJ
+preplace netloc mdm_1_debug_sys_rst 1 1 3 230 670 NJ 670 810
 preplace netloc MODULE_CONTROLLER_0_DEBUG_1 1 6 1 2150J
-levelinfo -pg 1 0 110 400 690 1050 1470 1890 2170 -top -10 -bot 1020
+levelinfo -pg 1 -10 110 410 700 1060 1470 1890 2170 -top -10 -bot 1020
 "
 }
 {
