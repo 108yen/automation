@@ -75,10 +75,10 @@ module ATTACK_SIGNAL_GENERATOR(CLK, RESET, DEBUG_COUNT, ATTACK_STATE, SENDER_TQ,
     reg [7:0]attack_count;
     reg [7:0]delay;
     reg [1:0]regster;
+    wire [7:0] array [7:0];
     
     wire [8:0]resyn_d;
     wire [7:0]TQ_length;
-    wire [7:0] array [59:0];
     wire [7:0]attack_num;
     
     assign TQ_length = 8'd125 / CLK_WAVELENGTH - 8'd1;  //40MHzだと4    
@@ -242,7 +242,16 @@ module ATTACK_SIGNAL_GENERATOR(CLK, RESET, DEBUG_COUNT, ATTACK_STATE, SENDER_TQ,
     assign attack_length_count = SIGNAL_L / (CLK_WAVELENGTH * 8'd2);
     assign st_attack = RECEIVER_SP * (TQ_length + 8'd1) - attack_length_count;
     assign receiver_count = RECEIVER_TQ * (TQ_length + 8'd1) + R_COUNTER;
-    assign cond_attack = receiver_count == st_attack - adjust - 8'd4 + convert(array[attack_num]);
+//    assign cond_attack = receiver_count == st_attack - adjust - 8'd4 + convert(array[attack_num]);
+    assign cond_attack = receiver_count == st_attack - adjust - 8'd4 + array[attack_num];
+    assign array[0] = 8'd4;
+    assign array[1] = 8'd4;
+    assign array[2] = 8'd4;
+    assign array[3] = 8'd4;
+    assign array[4] = 8'd4;
+    assign array[5] = 8'd4;
+    assign array[6] = 8'd4;
+    assign array[7] = 8'd4;
     
 //    手動実験用
     wire st_dom_manu = SENDER_BIT == 8'd38 && SENDER_TQ == 8'd13;
@@ -311,113 +320,5 @@ module ATTACK_SIGNAL_GENERATOR(CLK, RESET, DEBUG_COUNT, ATTACK_STATE, SENDER_TQ,
         .ATTACK_BIT(attack_bit), 
         .ATTACK_NUM(attack_num)
         );
-    
-//    パターンをずれのカウントに変換する
-    /*function [8:0]convert;
-        input [7:0]n;
-        
-        case(n)
-            8'd0: convert = {1'b0,8'd1};
-            8'd1: convert = {1'b1,8'd1};
-            8'd2: convert = {1'b0,8'd2};
-            8'd3: convert = {1'b1,8'd2};
-            8'd4: convert = {1'b0,8'd3};
-            8'd5: convert = {1'b1,8'd3};
-            8'd6: convert = {1'b0,8'd4};
-            8'd7: convert = {1'b1,8'd4};
-        endcase
-    endfunction;*/
-    function [7:0]convert;
-        input [7:0]n;
-        
-        case(n)
-           /* 8'd0: convert = 8'd8;
-            8'd1: convert = 8'd10;
-            8'd2: convert = 8'd6;
-            8'd3: convert = 8'd12;
-            8'd4: convert = 8'd4;
-            8'd5: convert = 8'd14;
-            8'd6: convert = 8'd2;
-            8'd7: convert = 8'd16;
-            8'd8: convert = 8'd0;*/
-            /*8'd0: convert = 8'd4;
-            8'd1: convert = 8'd6;
-            8'd2: convert = 8'd2;
-            8'd3: convert = 8'd8;
-            8'd4: convert = 8'd0;*/
-            8'd0: convert = 8'd4;
-            8'd1: convert = 8'd5;
-            8'd2: convert = 8'd3;
-            8'd3: convert = 8'd6;
-            8'd4: convert = 8'd2;
-            8'd5: convert = 8'd7;
-            8'd6: convert = 8'd1;
-            8'd7: convert = 8'd8;
-            8'd8: convert = 8'd0;
-        endcase
-    endfunction;
-    
-    assign {
-        array[0],
-        array[1],
-        array[2],
-        array[3],
-        array[4],
-        array[5],
-        array[6],
-        array[7],
-        array[8],
-        array[9],
-        array[10],
-        array[11],
-        array[12],
-        array[13],
-        array[14],
-        array[15],
-        array[16],
-        array[17],
-        array[18],
-        array[19],
-        array[20],
-        array[21],
-        array[22],
-        array[23],
-        array[24],
-        array[25],
-        array[26],
-        array[27],
-        array[28],
-        array[29],
-        array[30],
-        array[31],
-        array[32],
-        array[33],
-        array[34],
-        array[35],
-        array[36],
-        array[37],
-        array[38],
-        array[39],
-        array[40],
-        array[41],
-        array[42],
-        array[43],
-        array[44],
-        array[45],
-        array[46],
-        array[47],
-        array[48],
-        array[49],
-        array[50],
-        array[51],
-        array[52],
-        array[53],
-        array[54],
-        array[55],
-        array[56],
-        array[57],
-        array[58],
-        array[59]
-        } = DEVIATION[479:0];
     
 endmodule
