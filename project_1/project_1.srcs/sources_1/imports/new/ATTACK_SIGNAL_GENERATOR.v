@@ -245,19 +245,19 @@ module ATTACK_SIGNAL_GENERATOR(CLK, RESET, DEBUG_COUNT, ATTACK_STATE, SENDER_TQ,
 //    assign cond_attack = receiver_count == st_attack - adjust - 8'd4 + convert(array[attack_num]);
     assign cond_attack = receiver_count == st_attack - adjust - 8'd4 + array[attack_num];
     assign array[0] = 8'd4;
-    assign array[1] = 8'd4;
+    assign array[1] = 8'd3;
     assign array[2] = 8'd4;
-    assign array[3] = 8'd4;
+    assign array[3] = 8'd2;
     assign array[4] = 8'd4;
     assign array[5] = 8'd4;
-    assign array[6] = 8'd4;
+    assign array[6] = 8'd0;
     assign array[7] = 8'd4;
     
 //    手動実験用
     wire st_dom_manu = SENDER_BIT == 8'd38 && SENDER_TQ == 8'd13;
-    wire fin_dom_manu = SENDER_BIT == 8'd39 && SENDER_TQ == 8'd6;
+    wire fin_dom_manu = SENDER_BIT == 8'd39 && SENDER_TQ == 8'd9;
     wire st_rec_manu = SENDER_BIT == 8'd42 && SENDER_TQ == 8'd13;
-    wire fin_rec_manu = SENDER_BIT == 8'd43 && SENDER_TQ == 8'd6;
+    wire fin_rec_manu = (SENDER_BIT == 8'd43 && SENDER_TQ == 8'd6) || (SENDER_BIT == 8'd38 && SENDER_TQ == 8'd6);
 //    wire st_rec_manu = (SENDER_BIT == 8'd41 || SENDER_BIT == 8'd42) && SENDER_TQ == 8'd13;
 //    wire fin_rec_manu = (SENDER_BIT == 8'd42 || SENDER_BIT == 8'd43) && SENDER_TQ == 8'd6;
 
@@ -295,7 +295,7 @@ module ATTACK_SIGNAL_GENERATOR(CLK, RESET, DEBUG_COUNT, ATTACK_STATE, SENDER_TQ,
             TO_RECESSIVE <= 1'b1;
         end else if(cond_attack && attack_bit && UNATTACKED_MSG[MSG_L - 1 - RECEIVER_BIT] == 1'b0) begin    //今0なら1に電位差操作する必要がある
             TO_RECESSIVE <= 1'b0;
-        end else if(resyn_edge == 2'b10) begin
+        end else if(resyn_edge == 2'b10 && SENDER_BIT != 8'd38) begin
             TO_RECESSIVE <= 1'b1;
         end else if(resyn_edge == 2'b01) begin
             TO_RECESSIVE <= 1'b0;
