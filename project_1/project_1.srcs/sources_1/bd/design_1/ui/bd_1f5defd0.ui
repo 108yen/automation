@@ -50,8 +50,8 @@ preplace netloc clk_wiz_1_locked 1 1 4 180 870 NJ 870 NJ 870 1450J
 preplace netloc axi_uartlite_0_UART 1 5 1 1900J
 preplace netloc axi_gpio_0_GPIO 1 5 1 1890J
 preplace netloc clk_wiz_1_clk_out2 1 1 4 N 1040 580J 1050 NJ 1050 1470J
-preplace netloc microblaze_0_dlmb_1 1 3 1 N
 preplace netloc microblaze_0_axi_periph_M02_AXI 1 4 1 1420
+preplace netloc microblaze_0_dlmb_1 1 3 1 N
 preplace netloc Net1 1 5 1 NJ
 preplace netloc Net 1 5 1 NJ
 preplace netloc microblaze_0_debug 1 2 1 N

@@ -270,10 +270,10 @@ module ATTACK_SIGNAL_GENERATOR(CLK, RESET, DEBUG_COUNT, ATTACK_STATE, SENDER_TQ,
             TO_DOMINANT <= 1'b1;
         end else if(st_dom_manu) begin
             TO_DOMINANT <= 1'b0;
-        /*end else if(ack_bit == SENDER_BIT && SENDER_TQ == 8'd15) begin
-            TO_DOMINANT <= 1'b1;
-        end else if(ACK_TRIGER && ack_bit == 0 &&  SENDER_TQ == 8'd0) begin
-            TO_DOMINANT <= 1'b0;*/
+//        end else if(ack_bit + 8'd1 == SENDER_BIT && SENDER_TQ == 8'd2) begin
+//            TO_DOMINANT <= 1'b1;
+//        end else if(ACK_TRIGER && ack_bit == SENDER_BIT &&  SENDER_TQ == 8'd4) begin
+//            TO_DOMINANT <= 1'b0;
         end else if(fin_attack) begin
             TO_DOMINANT <= 1'b1;
         end else if(cond_attack && attack_bit && UNATTACKED_MSG[MSG_L - 1 - RECEIVER_BIT] == 1'b1) begin    //¡1‚È‚ç0‚É“dˆÊ·‘€ì‚·‚é•K—v‚ª‚ ‚é
@@ -308,8 +308,8 @@ module ATTACK_SIGNAL_GENERATOR(CLK, RESET, DEBUG_COUNT, ATTACK_STATE, SENDER_TQ,
             ack_bit <= 0;
         end else if(~ATTACK_STATE) begin
             ack_bit <= 0;
-        end else if(ACK_TRIGER && SENDER_TQ == 8'd0) begin
-            ack_bit <= SENDER_BIT;
+        end else if(ACK_TRIGER && SENDER_TQ == 8'd0 && ack_bit == 0) begin
+            ack_bit <= SENDER_BIT + 8'd1;
         end
     end
     
