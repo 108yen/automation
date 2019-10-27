@@ -41,8 +41,8 @@ preplace netloc MODULE_CONTROLLER_0_SUCCESS_RATE 1 5 1 1880
 preplace netloc MODULE_CONTROLLER_0_TRIGER 1 5 1 NJ
 preplace netloc MODULE_CONTROLLER_0_OPERATING_STATE 1 5 1 1850
 preplace netloc rst_clk_wiz_1_100M_bus_struct_reset 1 2 2 NJ 1120 1110
-preplace netloc microblaze_0_axi_periph_M01_AXI 1 4 1 1440
 preplace netloc axi_gpio_0_GPIO2 1 5 1 1900J
+preplace netloc microblaze_0_axi_periph_M01_AXI 1 4 1 1440
 preplace netloc MODULE_CONTROLLER_0_ARRAY 1 5 1 1860
 preplace netloc rst_clk_wiz_1_100M_peripheral_aresetn 1 2 3 570J 850 1080 510 1470
 preplace netloc rst_clk_wiz_1_100M_mb_reset 1 2 1 590
