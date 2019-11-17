@@ -33,9 +33,9 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
     output [31:0]SUCCESS_RATE;
     output [31:0]SEARCH_NUM;
     output [31:0]ARRAY;
-    output DEBUG;
+    output reg DEBUG;
     output reg DEBUG_1;
-    output reg DEBUG_2;
+    output DEBUG_2;
     
     wire sp_trg;                    //Artyがバス上の値をサンプリングするタイミング
     wire state;                     //メッセージを受信したら1
@@ -65,7 +65,8 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
 //    assign ARRAY = {deviation[451:448], deviation[443:440], deviation[435:432], deviation[427:424], deviation[419:416], deviation[411:408], deviation[403:400], deviation[395:392]};
     assign ARRAY = {deviation[475:472], deviation[467:464], deviation[459:456], deviation[451:448], deviation[443:440], deviation[435:432], deviation[427:424], deviation[419:416]};
 //    resyn
-    assign DEBUG = attack_signal_generator.resyn_bit;
+//    assign DEBUG = bit_count.s_bit_inc;
+    assign DEBUG_2 = attack_signal_generator.resyn_bit;
 //    assign DEBUG = communication_observation.accept_frame;
 /*
     always @(posedge CLK) begin
@@ -159,11 +160,11 @@ module MODULE_CONTROLLER(CLK, RESET, ATTACK_PERMIT, DEBUG_COUNT, CAN_SIGNAL_IN, 
     
     always @(posedge CLK) begin
         if(~RESET) begin
-            DEBUG_2 <= 1'b0;
+            DEBUG <= 1'b0;
         end else if(state == 1'b0) begin
-            DEBUG_2 <= 1'b0;
+            DEBUG <= 1'b0;
         end else if (pre_sender_bit != sender_bit) begin
-            DEBUG_2 <= ~DEBUG_2;
+            DEBUG <= ~DEBUG;
         end
     end
     /*

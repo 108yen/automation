@@ -173,10 +173,10 @@ module TQ_OBSERVER(CLK, RESET, STATE, ATTACK_STATE, CAN_SIGNAL_IN, BUS_MSG, DEBU
             S_COUNTER <= 8'b0;
         end else if(syn == 2'b10 && STATE && ~ACK_TRIGER && ~ATTACK_STATE) begin    //UŒ‚Žž‚¶‚á‚È‚¢‚Æ‚«ACKˆÈŠO‚Ì10ƒGƒbƒW‚Å“¯Šú
             S_COUNTER <= 8'd3;
-        end else if(r_resyn_pts) begin
-            S_COUNTER <= 8'd2;
-        end else if(s_resyn_ps2) begin
-            S_COUNTER <= 8'd2;
+//        end else if(r_resyn_pts) begin
+//            S_COUNTER <= 8'd2;
+//        end else if(s_resyn_ps2) begin
+//            S_COUNTER <= 8'd2;
 //            S_COUNTER <= 8'd1;
         /*end else if(syn == 2'b10 && ATTACK_STATE && SENDER_TQ >= s_timing1 && SENDER_TQ < s_timing2) begin  //UŒ‚’†‚ÌÄ“¯Šú
             S_COUNTER <= 8'd0;*/

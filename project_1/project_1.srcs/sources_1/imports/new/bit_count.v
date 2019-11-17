@@ -32,7 +32,19 @@ module BIT_COUNT(CLK, RESET, STATE, SENDER_TQ, RECEIVER_TQ, SENDER_BIT, RECEIVER
     
     reg s_bit_inc;
     reg r_bit_inc;
-    reg [7:0]count;
+    reg [7:0]count;    
+    
+    always @(posedge CLK) begin
+        if(~RESET) begin
+            count <= 8'b0;
+        end else if(~STATE) begin
+            count <= 8'b0;
+        end else if(count == 8'd100) begin
+            
+        end else if(STATE) begin
+            count <= count + 8'b1;
+        end
+    end
     
 //   sender_bit    ‘—M‘¤‚Ìbit‚ð”‚¦‚é
     always @(posedge CLK) begin
@@ -58,18 +70,7 @@ module BIT_COUNT(CLK, RESET, STATE, SENDER_TQ, RECEIVER_TQ, SENDER_BIT, RECEIVER
             s_bit_inc <= 1'b0;
         end
     end
-    
-    always @(posedge CLK) begin
-        if(~RESET) begin
-            count <= 8'b0;
-        end else if(~STATE) begin
-            count <= 8'b0;
-        end else if(count == 8'd100) begin
-            
-        end else if(STATE) begin
-            count <= count + 8'b1;
-        end
-    end
+
 //    ŽóM‘¤‚Ìbit‚ð”‚¦‚é
     always @(posedge CLK) begin
         if(~RESET) begin
