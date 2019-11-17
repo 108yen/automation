@@ -254,13 +254,10 @@ module ATTACK_SIGNAL_GENERATOR(CLK, RESET, DEBUG_COUNT, ATTACK_STATE, SENDER_TQ,
     assign array[7] = 8'd4;
     
 //    手動実験用
-    wire st_dom_manu = SENDER_BIT == 8'd38 && SENDER_TQ == 8'd13;
-//    wire fin_dom_manu = SENDER_BIT == 8'd39 && SENDER_TQ == 8'd6;
-    wire fin_dom_manu = SENDER_BIT == 8'd39 && SENDER_TQ == 8'd6;
-    wire st_rec_manu = SENDER_BIT == 8'd42 && SENDER_TQ == 8'd13;
-    wire fin_rec_manu = (SENDER_BIT == 8'd43 && SENDER_TQ == 8'd6) || (SENDER_BIT == 8'd38 && SENDER_TQ == 8'd7);
-//    wire st_rec_manu = (SENDER_BIT == 8'd41 || SENDER_BIT == 8'd42) && SENDER_TQ == 8'd13;
-//    wire fin_rec_manu = (SENDER_BIT == 8'd42 || SENDER_BIT == 8'd43) && SENDER_TQ == 8'd6;
+    wire st_dom_manu = (SENDER_BIT == 8'd28 && SENDER_TQ == 8'd10) || (SENDER_BIT == 8'd29 && SENDER_TQ == 8'd10) || (SENDER_BIT == 8'd35 && SENDER_TQ == 8'd9);
+    wire fin_dom_manu = (SENDER_BIT == 8'd28 && SENDER_TQ == 8'd12) || (SENDER_BIT == 8'd29 && SENDER_TQ == 8'd12) || (SENDER_BIT == 8'd35 && SENDER_TQ == 8'd15);
+    wire st_rec_manu = (SENDER_BIT == 8'd33 && SENDER_TQ == 8'd11);
+    wire fin_rec_manu = (SENDER_BIT == 8'd33 && SENDER_TQ == 8'd13);
 
     always @(posedge CLK) begin
         if(~RESET) begin
@@ -275,8 +272,8 @@ module ATTACK_SIGNAL_GENERATOR(CLK, RESET, DEBUG_COUNT, ATTACK_STATE, SENDER_TQ,
 //            TO_DOMINANT <= 1'b1;
 //        end else if(ACK_TRIGER && ack_bit == SENDER_BIT &&  SENDER_TQ == 8'd7) begin
 //            TO_DOMINANT <= 1'b0;
-        end else if(fin_attack) begin
-            TO_DOMINANT <= 1'b1;
+//        end else if(fin_attack) begin
+//            TO_DOMINANT <= 1'b1;
         end else if(cond_attack && attack_bit && UNATTACKED_MSG[MSG_L - 1 - RECEIVER_BIT] == 1'b1) begin    //今1なら0に電位差操作する必要がある
             TO_DOMINANT <= 1'b0;
         end
@@ -292,13 +289,13 @@ module ATTACK_SIGNAL_GENERATOR(CLK, RESET, DEBUG_COUNT, ATTACK_STATE, SENDER_TQ,
             TO_RECESSIVE <= 1'b1;
         end else if(st_rec_manu) begin
             TO_RECESSIVE <= 1'b0;
-        end else if(fin_attack) begin
-            TO_RECESSIVE <= 1'b1;
+//        end else if(fin_attack) begin
+//            TO_RECESSIVE <= 1'b1;
         end else if(cond_attack && attack_bit && UNATTACKED_MSG[MSG_L - 1 - RECEIVER_BIT] == 1'b0) begin    //今0なら1に電位差操作する必要がある
             TO_RECESSIVE <= 1'b0;
-        end else if(resyn_edge == 2'b10/* && SENDER_BIT != 8'd38*/) begin
+        end else if(resyn_edge == 2'b10 && SENDER_BIT != 8'd31/* && SENDER_BIT != 8'd38*/) begin
             TO_RECESSIVE <= 1'b1;
-        end else if(resyn_edge == 2'b01/* && SENDER_BIT != 8'd39*/) begin
+        end else if(resyn_edge == 2'b01 && SENDER_BIT != 8'd30/* && SENDER_BIT != 8'd39*/) begin
             TO_RECESSIVE <= 1'b0;
         end
     end

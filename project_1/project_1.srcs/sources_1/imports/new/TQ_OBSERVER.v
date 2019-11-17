@@ -228,18 +228,18 @@ module TQ_OBSERVER(CLK, RESET, STATE, ATTACK_STATE, CAN_SIGNAL_IN, BUS_MSG, DEBU
             SENDER_TQ <= 8'b0;
         end else if(syn == 2'b10 && /*STATE && */~ACK_TRIGER && ~ATTACK_STATE) begin    //攻撃時じゃないときACK以外の10エッジで同期
             SENDER_TQ <= 8'b0;
-        end else if(s_resyn_ps2) begin    // PS2内なら
-            if(8'd15 - SENDER_TQ < SJW + 8'd1) begin //SJWの範囲内なら
-                SENDER_TQ <= 8'd0;
-            end else begin  //SJWの範囲外ならSJWの分だけ再同期
-                SENDER_TQ <= SENDER_TQ + SJW;
-            end
-        end else if(s_resyn_pts) begin//攻撃時 10のエッジがPTS内なら
-            if(SJW - 1 >= SENDER_TQ) begin
-                SENDER_TQ <= 1'd0;
-            end else begin  //SJWの範囲外ならSJWの分だけ再同期
-                SENDER_TQ <= SENDER_TQ - (SJW - 8'd1);
-            end
+//        end else if(s_resyn_ps2) begin    // PS2内なら
+//            if(8'd15 - SENDER_TQ < SJW + 8'd1) begin //SJWの範囲内なら
+//                SENDER_TQ <= 8'd0;
+//            end else begin  //SJWの範囲外ならSJWの分だけ再同期
+//                SENDER_TQ <= SENDER_TQ + SJW;
+//            end
+//        end else if(s_resyn_pts) begin//攻撃時 10のエッジがPTS内なら
+//            if(SJW - 1 >= SENDER_TQ) begin
+//                SENDER_TQ <= 1'd0;
+//            end else begin  //SJWの範囲外ならSJWの分だけ再同期
+//                SENDER_TQ <= SENDER_TQ - (SJW - 8'd1);
+//            end
         end else begin //インクリメント
             if(S_COUNTER == TQ_length && SENDER_TQ == 8'd15) begin
                 SENDER_TQ <= 8'b0;
