@@ -254,14 +254,22 @@ module ATTACK_SIGNAL_GENERATOR(CLK, RESET, DEBUG_COUNT, ATTACK_STATE, SENDER_TQ,
     assign array[7] = 8'd4;
     
 //    Žè“®ŽÀŒ±—p
-    wire st_dom_manu = (SENDER_BIT == 8'd28 && SENDER_TQ == 8'd8) || (SENDER_BIT == 8'd29 && SENDER_TQ == 8'd6) || (SENDER_BIT == 8'd35 && SENDER_TQ == 8'd4)
-                         || (SENDER_BIT == 8'd39 && SENDER_TQ == 8'd2)/* || (SENDER_BIT == 8'd43 && SENDER_TQ == 8'd6)*/;
-    wire fin_dom_manu = (SENDER_BIT == 8'd28 && SENDER_TQ == 8'd12) || (SENDER_BIT == 8'd29 && SENDER_TQ == 8'd15) || (SENDER_BIT == 8'd35 && SENDER_TQ == 8'd12)
-                         || (SENDER_BIT == 8'd39 && SENDER_TQ == 8'd12)/* || (SENDER_BIT == 8'd43 && SENDER_TQ == 8'd12)*/;
+    wire st_dom_manu = (SENDER_BIT == 8'd28 && SENDER_TQ == 8'd8) || (SENDER_BIT == 8'd29 && SENDER_TQ == 8'd7) || (SENDER_BIT == 8'd35 && SENDER_TQ == 8'd6)
+                         || (SENDER_BIT == 8'd39 && SENDER_TQ == 8'd4)/* || (SENDER_BIT == 8'd43 && SENDER_TQ == 8'd6)*/;
+    wire fin_dom_manu = (SENDER_BIT == 8'd28 && SENDER_TQ == 8'd12) || (SENDER_BIT == 8'd29 && SENDER_TQ == 8'd11) || (SENDER_BIT == 8'd35 && SENDER_TQ == 8'd10)
+                         || (SENDER_BIT == 8'd39 && SENDER_TQ == 8'd8)/* || (SENDER_BIT == 8'd43 && SENDER_TQ == 8'd12)*/;
+    wire st_rec_manu = (SENDER_BIT == 8'd30 && SENDER_TQ == 8'd10) || (SENDER_BIT == 8'd33 && SENDER_TQ == 8'd7) || (SENDER_BIT == 8'd36 && SENDER_TQ == 8'd6)/* || (SENDER_BIT == 8'd37 && SENDER_TQ == 8'd4)*/
+                         || (SENDER_BIT == 8'd40 && SENDER_TQ == 8'd4) || (SENDER_BIT == 8'd42 && SENDER_TQ == 8'd6) || (SENDER_BIT == 8'd43 && SENDER_TQ == 8'd3);
+    wire fin_rec_manu = (SENDER_BIT == 8'd30 && SENDER_TQ == 8'd15) || (SENDER_BIT == 8'd33 && SENDER_TQ == 8'd11) || (SENDER_BIT == 8'd36 && SENDER_TQ == 8'd10)/* || (SENDER_BIT == 8'd37 && SENDER_TQ == 8'd8)*/
+                         || (SENDER_BIT == 8'd40 && SENDER_TQ == 8'd8) || (SENDER_BIT == 8'd42 && SENDER_TQ == 8'd10) || (SENDER_BIT == 8'd43 && SENDER_TQ == 8'd7);
+/*     wire st_dom_manu = (SENDER_BIT == 8'd28 && SENDER_TQ == 8'd8) || (SENDER_BIT == 8'd29 && SENDER_TQ == 8'd7) || (SENDER_BIT == 8'd35 && SENDER_TQ == 8'd4)
+                         || (SENDER_BIT == 8'd39 && SENDER_TQ == 8'd2)*//* || (SENDER_BIT == 8'd43 && SENDER_TQ == 8'd6)*//*;
+    wire fin_dom_manu = (SENDER_BIT == 8'd28 && SENDER_TQ == 8'd12) || (SENDER_BIT == 8'd29 && SENDER_TQ == 8'd11) || (SENDER_BIT == 8'd35 && SENDER_TQ == 8'd12)
+                         || (SENDER_BIT == 8'd39 && SENDER_TQ == 8'd12)*//* || (SENDER_BIT == 8'd43 && SENDER_TQ == 8'd12)*//*;
     wire st_rec_manu = (SENDER_BIT == 8'd30 && SENDER_TQ == 8'd10) || (SENDER_BIT == 8'd33 && SENDER_TQ == 8'd4) || (SENDER_BIT == 8'd36 && SENDER_TQ == 8'd2) || (SENDER_BIT == 8'd37 && SENDER_TQ == 8'd4)
                          || (SENDER_BIT == 8'd40 && SENDER_TQ == 8'd1) || (SENDER_BIT == 8'd42 && SENDER_TQ == 8'd6) || (SENDER_BIT == 8'd43 && SENDER_TQ == 8'd3);
-    wire fin_rec_manu = (SENDER_BIT == 8'd30 && SENDER_TQ == 8'd15) || (SENDER_BIT == 8'd33 && SENDER_TQ == 8'd13) || (SENDER_BIT == 8'd36 && SENDER_TQ == 8'd12) || (SENDER_BIT == 8'd37 && SENDER_TQ == 8'd12)
-                         || (SENDER_BIT == 8'd40 && SENDER_TQ == 8'd12) || (SENDER_BIT == 8'd42 && SENDER_TQ == 8'd12) || (SENDER_BIT == 8'd43 && SENDER_TQ == 8'd12);
+    wire fin_rec_manu = (SENDER_BIT == 8'd30 && SENDER_TQ == 8'd15) || (SENDER_BIT == 8'd33 && SENDER_TQ == 8'd11) || (SENDER_BIT == 8'd36 && SENDER_TQ == 8'd12) || (SENDER_BIT == 8'd37 && SENDER_TQ == 8'd12)
+                         || (SENDER_BIT == 8'd40 && SENDER_TQ == 8'd12) || (SENDER_BIT == 8'd42 && SENDER_TQ == 8'd12) || (SENDER_BIT == 8'd43 && SENDER_TQ == 8'd12);*/
 
     always @(posedge CLK) begin
         if(~RESET) begin
